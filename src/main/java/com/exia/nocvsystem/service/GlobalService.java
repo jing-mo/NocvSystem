@@ -3,9 +3,9 @@ package com.exia.nocvsystem.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.exia.nocvsystem.entity.LineTrend;
 import com.exia.nocvsystem.entity.NocvData;
+import com.exia.nocvsystem.entity.NocvGlobalData;
 
 import java.util.List;
 
-public interface IndexService extends IService<NocvData> {
-    List<LineTrend> findSevenData();
+public interface GlobalService extends IService<NocvGlobalData> {
 }

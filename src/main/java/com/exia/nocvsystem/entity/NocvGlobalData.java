@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("nocv_data")
-public class NocvData {
+@TableName("nocv_global_data")
+public class NocvGlobalData {
     private String name;
     private Integer value;
 

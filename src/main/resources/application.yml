@@ -1,1 +1,10 @@
+spring:
+  datasource:
+    username: root
+    password: 57630309
+    url: jdbc:mysql://127.0.0.1:3306/nocv?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
 
+
+  mvc:
+    static-path-pattern: /static/**
