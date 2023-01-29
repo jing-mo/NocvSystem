@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <script th:src="@{../static/layui/layui.js}" charset="utf-8"></script>
+    <link rel="stylesheet" th:href="@{../static/layui/css/layui.css}" media="all">
+    <script th:src="@{../static/echarts/jquery-3.6.1.min.js}"></script>
+    <style>
+        body{margin: 10px;}
+        .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+    </style>
+</head>
+<body>
+<!--模态窗-->
+<div id= "addOrUpdateDiv" style="display: none;padding: 10px;padding-right: 5%">
+    <form action="" method="post" id="searchFrm2" lay-filter="searchFrm2" class="layui-form">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="username" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="sex" value="男" title="男">
+                <input type="radio" name="sex" value="女" title="女" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">年龄</label>
+            <div class="layui-input-inline">
+                <input type="text" name="age" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">手机号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="phone" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">早上体温</label>
+            <div class="layui-input-inline">
+                <input type="text" name="morningTemp" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">中午体温</label>
+            <div class="layui-input-inline">
+                <input type="text" name="afternoonTemp" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">晚上体温</label>
+            <div class="layui-input-inline">
+                <input type="text" name="nightTemp" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">发烧咳嗽</label>
+            <div class="layui-input-inline">
+                <input type="text" name="feverAndCough" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">近期居住地</label>
+            <div class="layui-input-inline">
+                <input type="text" name="recentHome" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">地区风险级别</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="riskZone" value="高风险区" title="高风险区">
+                <input type="radio" name="riskZone" value="中风险区" title="中风险区">
+                <input type="radio" name="riskZone" value="低风险区" title="低风险区" checked>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">近期接触史</label>
+            <div class="layui-input-inline">
+                <textarea name="recentZone" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">健康状况</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="healthStatus" value="健康" title="健康" checked>
+                <input type="radio" name="healthStatus" value="有发烧、咳嗽、腹泻等相关症状" title="有发烧、咳嗽、腹泻等相关症状">
+                <input type="radio" name="healthStatus" value="其他症状" title="其他症状">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="doAdd">健康打卡</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+<!--layui公共模块-->
+<div th:include="commommenu :: menu"></div>
+
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <!--搜索条件-->
+    <div style="padding-top: 5%">
+        <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">搜索条件</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="username" class="layui-input input-radius" placeholder="请输入姓名">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" name="phone" class="layui-input input-radius" placeholder="请输入手机号">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-radius" lay-submit="" lay-filter="doSearch"><i
+                            class="layui-icon layui-icon-search layui-icon-normal"></i>查询
+                    </button>
+                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm"><i
+                            class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- table -->
+    <div>
+        <table class="layui-hide" id="demo" lay-filter="test"></table>
+    </div>
+    <script type="text/html" id="barDemo">
+        <button type="button" lay-event="update"  class="layui-btn layui-btn-sm layui-btn-radius"><i
+                class="layui-icon layui-icon-edit" onclick="openAddLayer()"></i>编辑
+        </button>
+        <button type="button" lay-event="delete"  class="layui-btn layui-btn-sm layui-btn-danger layui-btn-radius"><i
+                class="layui-icon layui-icon-delete"></i>删除
+        </button>
+    </script>
+</div>
+
+
+
+
+<script>
+    layui.config({
+        version: '1632428048355' //为了更新 js 缓存，可忽略
+    });
+
+    var tableIns;
+    var mainIndex;
+
+    //加载模块
+    layui.use(['jquery'],function(){
+        var layer = layui.layer //弹层
+            ,$ = layui.jquery
+            ,laypage = layui.laypage //分页
+            ,laydate = layui.laydate //日期
+            ,table = layui.table //表格
+            ,carousel = layui.carousel //轮播
+            ,upload = layui.upload //上传
+            ,element = layui.element //元素操作
+            ,slider = layui.slider //滑块
+            ,dropdown = layui.dropdown //下拉菜单
+            ,form = layui.form
+
+        //监听Tab切换
+        element.on('tab(demo)', function(data){
+            layer.tips('切换了 '+ data.index +'：'+ this.innerHTML, this, {
+                tips: 1
+            });
+        });
+
+        //执行一个 table 实例
+        tableIns = table.render({
+            elem: '#demo'
+            ,height: 450
+            ,width: 1100
+            ,url: '/listHealthClock' //数据接口
+            ,title: '用户表'
+            ,page: true //开启分页
+            ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,totalRow: true //开启合计行
+            ,cols: [ [ //表头
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'id', title: 'ID', width:50,fixed: 'left'}
+                ,{field: 'username', title: '姓名', width:80}
+                ,{field: 'sex', title: '性别', width:80}
+                ,{field: 'age', title: '年龄', width:80}
+                ,{field: 'phone', title: '手机号', width:80}
+                ,{field: 'morningTemp', title: '早上体温', width:100}
+                ,{field: 'afternoonTemp', title: '中午体温', width:100}
+                ,{field: 'nightTemp', title: '晚上体温', width:100}
+                ,{field: 'feverAndCough', title: '发烧咳嗽', width:100}
+                ,{field: 'recentHome', title: '近期居住地', width:100}
+                ,{field: 'riskZone', title: '地区风险级别', width:150,templet:function (d) {
+                        let riskZone=d.riskZone;
+                        if(riskZone=='高风险区'){
+                            return '<span class="layui-badge layui-bg-red">高风险区</span>';
+                        }else if(riskZone=='中风险区'){
+                            return '<span class="layui-badge layui-bg-orange">中风险区</span>';
+                        }else if(riskZone=='低风险区')return '<span class="layui-badge layui-bg-green">低风险区</span>';
+                    }}
+                ,{field: 'recentZone', title: '近期接触地', width:100}
+                ,{field: 'healthStatus', title: '健康状况', width:100,fixed: 'right',templet:
+                        function (data) {
+                            if (data.healthStatus == '其他症状'){
+                                return '<span class=\"layui-badge layui-bg-orange\">其他症状</span>'
+                            }else if(data.healthStatus == '有发烧、咳嗽、腹泻等相关症状'){
+                                return '<span class=\"layui-badge layui-bg-red\">有发烧、咳嗽、腹泻等相关症状</span>'
+                            }else if (data.healthStatus == '健康')
+                                return '<span class=\"layui-badge layui-bg-green\">健康</span>'
+                        }
+                }
+                ,{fixed: 'right', width: 200, align:'center', toolbar: '#barDemo'}
+            ] ]
+        });
+
+        //监听头工具栏事件 新增 修改和删除
+        table.on('toolbar(test)', function(obj){
+            var data = obj.data; //获取选中的数据
+            switch(obj.event){
+                case 'add':
+                    // 调出弹窗
+                    openAddLayer();
+                    break;
+                case 'update':
+                    // 调出弹窗,加载一次数据  1.回显数据
+                    openAddLayer(data);
+                    break;
+                case 'delete':
+                    if(data.length === 0){
+                        layer.msg('请选择一行');
+                    } else {
+                        layer.msg('删除');
+                    }
+                    break;
+            };
+        });
+
+        //删除和编辑  监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data //获得当前行数据
+                ,layEvent = obj.event;
+            if(layEvent === 'update'){
+                // 更新的逻辑代码
+                openAddLayer(data);
+            } else if(layEvent === 'delete'){
+                layer.confirm('真的删除行么', function(index){
+                    obj.del(); //删除对应行（tr）的DOM结构
+                    //向服务端发送删除指令
+                    $.post("/deleteHealthClockById",{id: obj.data.id},function (res) {
+                        if (res.code == 200){
+                            tableIns.reload({
+                                where:"",
+                            });
+                        }
+                        layer.msg(res.msg);
+                    })
+                    layer.close(index);
+                });
+
+            }
+        });
+
+        // 模糊查询
+        form.on("submit(doSearch)",function (data) {
+            tableIns.reload({
+                where: data.field,
+                page:{
+                    curr: 1
+                }
+            });
+            return false;
+        })
+
+        // 新增或者数据请求
+        form.on("submit(doAdd)",function (data) {
+            $.post("/addHealthClock",data.field,function (res) {
+                if (res.code == 200){
+                    tableIns.reload();
+                }
+                layer.msg(res.msg);
+                layer.close(mainIndex);
+            });
+            return false;
+        });
+
+
+        // 模态窗//页面层
+        function openAddLayer(data){
+            mainIndex = layer.open({
+                type: 1,
+                skin: 'layui-layer-rim', //加上边框
+                content: $("#addOrUpdateDiv"),
+                area: ['500px', '600px'],
+                success:function () {
+                    $("#searchFrm2")[0].reset();
+                    form.val("searchFrm2",data);
+                }
+            });
+        }
+
+
+
+        //分页
+        laypage.render({
+            elem: 'pageDemo' //分页容器的id
+            ,count: 1000 //数据总数
+            ,limit: 10 //每页显示的数据条数
+            ,skin: '#1E9FFF' //自定义选中色值
+            //,layout: ['prev', 'page', 'next', 'count', 'limit', 'refresh', 'skip'] //自定义排版
+            ,jump: function(obj, first){
+                if(!first){
+                    layer.msg('第'+ obj.curr +'页', {offset: 'b'});
+                }
+            }
+        });
+
+
+    });
+</script>
+</body>
+</html>

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ChinaDataAdminController {
     @Autowired
     private IndexService indexService;
-    @RequestMapping("toChinaManager")
+    @RequestMapping("/toChinaManager")
     public String toChinaManager(){
         return "admin/chinadatamanager";
     }
@@ -34,6 +34,30 @@ public class ChinaDataAdminController {
         indexService.page(page,queryWrapper);
         //5.返回数据封装
         DataView dataView=new DataView(page.getTotal(),page.getRecords());
+        return dataView;
+    }
+    @RequestMapping("/china/deleteById")
+    @ResponseBody
+    public DataView deleteById(Integer id){
+        indexService.removeById(id);
+        DataView dataView=new DataView();
+        dataView.setCode(200);
+        dataView.setMsg("删除中国地图数据成功！");
+        return dataView;
+    }
+    //新增或修改,有值就是修改，没有值就是新增
+    @RequestMapping("/china/AddOrUpdateChina")
+    @ResponseBody
+    public DataView addChina(NocvData nocvData){
+        boolean save=indexService.saveOrUpdate(nocvData);
+        DataView dataView=new DataView();
+        if(save){
+            dataView.setCode(200);
+            dataView.setMsg("新增中国地图数据成功！");
+            return dataView;
+        }
+        dataView.setCode(100);
+        dataView.setMsg("新增中国地图数据失败！");
         return dataView;
     }
 }
