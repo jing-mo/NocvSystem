@@ -6,14 +6,16 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 @TableName("nocv_data")
 public class NocvData {
-    @TableId(value="id",type = IdType.AUTO)
     private Integer id;
-
+    @TableId
     private String name;
     private Integer value;
+    private Date updateTime;
 
     public String getName() {
         return name;
@@ -21,5 +23,9 @@ public class NocvData {
 
     public Integer getValue() {
         return value;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
     }
 }

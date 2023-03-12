@@ -20,7 +20,7 @@ public class GlobalController {
     @RequestMapping("/queryGlobal")
     @ResponseBody
     public List<NocvGlobalData> queryGlobalData(){
-        List<NocvGlobalData> list=globalService.list();
+        List<NocvGlobalData> list=globalService.listOrOrderByLimit198();
         return list;
     }
 }

@@ -8,4 +8,5 @@ import com.exia.nocvsystem.entity.NocvGlobalData;
 import java.util.List;
 
 public interface GlobalService extends IService<NocvGlobalData> {
+    List<NocvGlobalData> listOrOrderByLimit198();
 }

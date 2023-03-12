@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface IndexService extends IService<NocvData> {
     List<LineTrend> findSevenData();
+
+    List<NocvData> listOrOrderByLimit34();
 }

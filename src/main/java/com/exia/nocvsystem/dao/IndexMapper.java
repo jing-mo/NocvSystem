@@ -17,4 +17,6 @@ public interface IndexMapper extends BaseMapper<NocvData> {
     * */
     @Select("select * from line_trend order by create_time limit 7")
     List<LineTrend> findSevenData();
+    @Select("select * from nocv_data order by id desc limit 34")
+    List<NocvData> listOrOrderByLimit34();
 }

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <script th:src="@{../static/layui/layui.js}" charset="utf-8"></script>
     <link rel="stylesheet" th:href="@{../static/layui/css/layui.css}" media="all">
-    <script th:src="@{../static/echarts/jquery-3.6.1.min.js}"></script>
     <style>
         body{margin: 10px;}
         .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
@@ -15,7 +14,6 @@
 <!--模态窗-->
 <div id= "addOrUpdateDiv" style="display: none;padding: 10px;padding-right: 5%">
     <form action="" method="post" id="searchFrm2" lay-filter="searchFrm2" class="layui-form">
-
         <div class="layui-form-item">
             <label class="layui-form-label">姓名</label>
             <div class="layui-input-inline">
@@ -97,18 +95,15 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="doAdd">健康打卡</button>
-                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                <button class="layui-btn layui-btn-sm layui-btn-radius" lay-submit="" lay-filter="doAdd"><i class="layui-icon layui-icon-search layui-icon-normal"></i>健康打卡</button>
+                <button type="reset" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm">重置</button>
             </div>
         </div>
 
     </form>
 </div>
-
-
 <!--layui公共模块-->
 <div th:include="commommenu :: menu"></div>
-
 <div class="layui-body">
     <!-- 内容主体区域 -->
     <!--搜索条件-->
@@ -150,9 +145,6 @@
     </script>
 </div>
 
-
-
-
 <script>
     layui.config({
         version: '1632428048355' //为了更新 js 缓存，可忽略
@@ -174,6 +166,7 @@
             ,slider = layui.slider //滑块
             ,dropdown = layui.dropdown //下拉菜单
             ,form = layui.form
+            ,$=layui.jquery;
 
         //监听Tab切换
         element.on('tab(demo)', function(data){
@@ -293,7 +286,7 @@
                 }
                 layer.msg(res.msg);
                 layer.close(mainIndex);
-            });
+            })
             return false;
         });
 
@@ -310,7 +303,7 @@
                     form.val("searchFrm2",data);
                 }
             });
-        }
+        };
 
 
 

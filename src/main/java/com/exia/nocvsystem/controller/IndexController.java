@@ -1,29 +1,53 @@
 package com.exia.nocvsystem.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.exia.nocvsystem.entity.ChinaTotal;
 import com.exia.nocvsystem.entity.LineTrend;
 import com.exia.nocvsystem.entity.NocvData;
+import com.exia.nocvsystem.service.ChinaTotalService;
 import com.exia.nocvsystem.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
 public class IndexController {
     @Autowired
     private IndexService indexService;
+    @Autowired
+    private ChinaTotalService chinaTotalService;
+    //查询chinaTotal数据
+    @RequestMapping("/")
+    public String index(Model model) throws ParseException {
+        //1.找到ID最大的数据
+        Integer id=chinaTotalService.maxID();
+        //2.根据ID查找数据
+        ChinaTotal chinaTotal=chinaTotalService.getById(id);
+        model.addAttribute("chinaTotal",chinaTotal);
+        return "index";
+    }
     @RequestMapping("/query")
     @ResponseBody
-    public List<NocvData> queryData(){
-        List<NocvData> list=indexService.list();
+    public List<NocvData> queryData() throws ParseException {
+        //每天更新一次数据使用场景
+//        QueryWrapper<NocvData> queryWrapper=new QueryWrapper<>();
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//        String format1=format.format(new Date());
+//        queryWrapper.ge("update_time",format.parse(format1));
+        List<NocvData> list=indexService.listOrOrderByLimit34();
         return list;
     }
     //跳转pie页面
     @RequestMapping("/toPie")
     public String toPie(){
-        return "Pie";
+        return "pie";
     }
     /**
      * 分组聚合
@@ -32,7 +56,7 @@ public class IndexController {
     @RequestMapping("/queryPie")
     @ResponseBody
     public List<NocvData> queryPieData(){
-        List<NocvData> list=indexService.list();
+        List<NocvData> list=indexService.listOrOrderByLimit34();
         return list;
     }
     /**
@@ -46,7 +70,7 @@ public class IndexController {
     @ResponseBody
     public Map<String,List<Object>> queryBarData(){
         //1.所有城市数据:数值
-        List<NocvData> list=indexService.list();
+        List<NocvData> list=indexService.listOrOrderByLimit34();
         //2.所有城市数据
         List<String> cityList=new ArrayList<>();
         for(NocvData data: list){

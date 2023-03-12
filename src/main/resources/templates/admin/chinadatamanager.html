@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
-    <title>Layui</title>
+    <title>校园疫情管理系统</title>
     <script th:src="@{../static/layui/layui.js}" charset="utf-8"></script>
     <link rel="stylesheet" th:href="@{../static/layui/css/layui.css}"   media="all">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -13,7 +13,7 @@
 </head>
 <body>
 <--模态窗-->
-<div id="AddOrUpdateDiv" style="display: none;padding: 10px;padding-right: 10%">
+<div id="AddOrUpdateDiv" style="display: none;padding: 10px;padding-right:5%">
     <form action="" method="post" id="searchFrm2" lay-filter="searchFrm2" class="layui-form">
         <div class="layui-inline">
             <div class="layui-input-inline">
@@ -45,10 +45,11 @@
 
     </form>
 </div>
+
 <!--layui引入公共模块-->
 <div th:include="commommenu :: menu"></div>
 <div class="layui-body">
-    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
         <legend>搜索条件</legend>
     </fieldset>
     <!--搜索条件-->
@@ -61,26 +62,37 @@
                 </div>
             </div>
             <div class="layui-inline" style="padding-left: 10%">
-                <button type="button" class="layui-btn layui-btn-sm layui-btn-radius" lay-submit="" lay-filter="doSearch">
+                <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSearch">
                     <i class="layui-icon layui-icon-search layui-icon-normal"></i>查找
                 </button>
-                <button type="reset" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm" >
+                <button type="reset" class="layui-btn layui-btn-warm layui-btn-radius" >
                     <i class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                </button>
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-radius" lay-submit="" lay-filter="doOutPortExcel">
+                    <i class="layui-icon layui-icon-search layui-icon-normal">&#xe654</i>导出疫情数据Excel文件
                 </button>
             </div>
         </div>
         <!-- 内容主体区域 -->
-
     </form>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>导入疫情数据表格(表格需为xlsx格式,第一列为城市名称,第二列为确诊人数)</legend>
+    </fieldset>
+    <!--文件上传Div-->
+    <div class="layui-upload-drag" id="test10">
+        <i class="layui-icon"></i>
+        <p>点击上传，或将文件拖拽到此处</p>
+        <div class="layui-hide" id="uploadDemoView">
+            <hr>
+            <img src="" alt="上传成功后渲染" style="max-width: 196px">
+        </div>
+    </div>
     <!--table-->
     <div style="padding: 15px;">
         <table class="layui-hide" id="demo" lay-filter="test">地图名称</table>
     </div>
 
 </div>
-
-
-
 <script type="text/html" id="barDemo">
         <button type="button" lay-event="update" class="layui-btn layui-btn-sm layui-btn-radius">
             <i class="layui-icon layui-icon-edit" onclick="openAddLayer()"></i>编辑
@@ -96,7 +108,7 @@
     var tableIns;
     var mainIndex;
     //加载模块
-    layui.use(['jquery'],function(){
+    layui.use(['upload','jquery'],function(){
         var layer = layui.layer //弹层
             ,$=layui.jquery
             ,laypage = layui.laypage //分页
@@ -108,9 +120,7 @@
             ,slider = layui.slider //滑块
             ,dropdown = layui.dropdown //下拉菜单
             ,form=layui.form
-
-        //向世界问个好
-        layer.msg('Hello World');
+            ,$=layui.jquery
 
         //监听Tab切换
         element.on('tab(demo)', function(data){
@@ -133,6 +143,7 @@
                 ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
                 ,{field: 'name', title: '省份名称', width:150}
                 ,{field: 'value', title: '确诊人数', width:150, sort: true}
+                ,{field: 'update_time', title: '更新时间', width:150, sort: true}
                 ,{fixed: 'right', width: 200, align:'center', toolbar: '#barDemo'}
             ]]
         });
@@ -168,7 +179,7 @@
                 layer.close(mainIndex);
             })
             return false;
-        })
+        });
         //模糊查询
         form.on("submit(doSearch)",function (data){
             tableIns.reload({
@@ -216,7 +227,10 @@
                 }
             })
         }
-
+        //导出Excel数据
+        form.on("submit(doOutPortExcel)",function (){
+            window.location.href="/excelOutPortChina";
+        })
         //分页
         laypage.render({
             elem: 'pageDemo' //分页容器的id
@@ -230,7 +244,14 @@
                 }
             }
         });
-
+        //拖拽上传
+        upload.render({
+            elem: '#test10'
+            ,url: '/excelImportChina' //此处用的是第三方的 http 请求演示，实际使用时改成您自己的上传接口即可。
+            ,accept: 'file' //普通文件
+            ,done: function(res){
+                layer.msg(res.msg);
+            }});
     });
 
 </script>
