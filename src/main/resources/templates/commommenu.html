@@ -6,10 +6,10 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <script th:src="@{../static/echarts/echarts.min.js}"></script>
-    <script th:src="@{../static/echarts/jquery-3.6.1.min.js}"></script>
-    <script th:src="@{../static/echarts/china.js}"></script>
-    <script th:src="@{../static/layui/layui.js}" charset="utf-8"></script>
+    <script th:src="@{/echarts/echarts.min.js}"></script>
+    <script th:src="@{/echarts/jquery-3.6.1.min.js}"></script>
+    <script th:src="@{/echarts/china.js}"></script>
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
 </head>
 <body>
 <div th:fragment="menu" >
@@ -44,7 +44,7 @@
                 <dl class="layui-nav-child">
                     <dd><a href="">Your Profile</a></dd>
                     <dd><a href="">Settings</a></dd>
-                    <dd><a href="">Sign out</a></dd>
+                    <dd><a th:href="@{/login/loginout}">Sign out</a></dd>
                 </dl>
             </li>
             <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
@@ -80,6 +80,12 @@
                     <dl class="layui-nav-child">
                         <dd><a href="/toHealthClock">健康打卡记录</a></dd>
                         <dd><a href="javascript:;">list3</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">系统管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/menu/toMenu">菜单管理</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item"><a href="javascript:;">click menu item</a></li>

@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="stylesheet" th:href="@{../static/layui/css/layui.css}" media="all" />
-    <link rel="stylesheet" th:href="@{../static/css/login.css}" media="all" />
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all" />
+    <link rel="stylesheet" th:href="@{/css/login.css}" media="all" />
 </head>
 <body class="loginBody">
 <form class="layui-form">
-    <div class="login_face"><img th:src="@{../static/images/login.jpg}" class="userAvatar"></div>
+    <div class="login_face"><img th:src="@{/images/login.jpg}" class="userAvatar"></div>
     <div class="layui-form-item input-item">
         <label for="username">用户名</label>
         <input type="text" placeholder="请输入用户名" autocomplete="off" id = "username" name="username" class="layui-input" lay-verify="required">
@@ -24,8 +24,8 @@
         <input type="text" placeholder="请输入验证码" name="code" autocomplete="off" id="code" class="layui-input" lay-verify="required">
         <img th:src="@{/login/getCode}" onclick="this.src=this.src+'?'">
     </div>
+    <button class="layui-btn layui-block" lay-filter="login" lay-submit>登录</button>
     <div class="layui-form-item">
-        <button class="layui-btn layui-block" lay-filter="login" lay-submit>登录</button>
     </div>
     <div class="layui-form-item layui-row">
         <a href="javascript:;" class="seraph icon-qq layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>
@@ -33,7 +33,7 @@
         <a href="javascript:;" class="seraph icon-sina layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>
     </div>
 </form>
-<script type="text/javascript" th:src="@{../static/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
 <script type="text/javascript">
     layui.use(['form','layer','jquery'],function(){
         var form = layui.form,

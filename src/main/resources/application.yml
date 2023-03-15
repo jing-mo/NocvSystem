@@ -4,12 +4,8 @@ spring:
     password: 57630309
     url: jdbc:mysql://127.0.0.1:3306/nocv?useUnicode=true&characterEncoding=utf-8&useSSL=false
     driver-class-name: com.mysql.jdbc.Driver
-
-
-  mvc:
-    static-path-pattern: /static/**
-
-
+  server:
+    port: 8080  # 端口号
   thymeleaf:
     prefix:
       classpath: /templates/**
@@ -17,3 +13,20 @@ spring:
     suffix: .html
     encoding: UTF-8
     content-type: text/html
+#shiro的配置
+shiro:
+  anon-urls:
+    - /toLogin*
+    - /login.html*
+    - /login/login
+    - /login/getCode
+    - /css/**
+    - /echarts/**
+    - /images/**
+    - /layui/**
+    - /layui_ext/**
+    - /menu/toMenu*
+  login-url: /index2.html
+  log-out-url: /login/loginout*
+  authc-ulrs:
+    - /**

@@ -1,10 +1,10 @@
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['exports', 'echarts'], factory);
+        define(['exports', 'static/echarts/echarts'], factory);
     } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
         // CommonJS
-        factory(exports, require('echarts'));
+        factory(exports, require('static/echarts/echarts'));
     } else {
         // Browser globals
         factory({}, root.echarts);

@@ -5,8 +5,12 @@ import cn.hutool.captcha.LineCaptcha;
 import com.exia.nocvsystem.entity.User;
 import com.exia.nocvsystem.service.LoginService;
 import com.exia.nocvsystem.vo.DataView;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.resource.HttpResource;
@@ -49,8 +53,15 @@ public class LoginController {
         //1.首先判断验证码对不对
         String sessionCode=(String)session.getAttribute("code");
         if(code!=null && sessionCode.equals(code)){
-            //2.登录逻辑
-            User user=loginService.login(username,password);
+
+            //2.session普通登录
+            //User user=loginService.login(username,password);
+            //shiro登录
+            Subject subject= SecurityUtils.getSubject();
+            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+            subject.login(token);
+            User user = (User) subject.getPrincipal();
+            //User user=loginService.login(username,password);
             if(user!=null){
                 dataView.setCode(200);
                 dataView.setMsg("登录成功！");
@@ -60,12 +71,19 @@ public class LoginController {
             }else{
                 dataView.setCode(100);
                 dataView.setMsg("用户名或者密码错误，登录失败！");
-
+                return dataView;
             }
         }
         dataView.setCode(100);
         dataView.setMsg("验证码错误，登录失败！");
         return dataView;
 
+    }
+    @RequestMapping("/login/loginout")
+    //登出
+    public String logout(){
+        Subject subject=SecurityUtils.getSubject();
+        subject.logout();
+        return "login";
     }
 }
