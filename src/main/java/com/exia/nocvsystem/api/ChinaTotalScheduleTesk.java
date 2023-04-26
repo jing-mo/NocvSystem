@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import redis.clients.jedis.Jedis;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,7 +31,7 @@ public class ChinaTotalScheduleTesk {
     private IndexService indexService;
     @Autowired
     private GlobalService globalService;
-    @Scheduled(fixedDelay = 100000)
+    @Scheduled(fixedDelay = 1000000000)
     public void updateChinaTotalToDB() throws Exception {
         HttpUtils httpUtils=new HttpUtils();
         String str=httpUtils.getData();
@@ -67,6 +68,7 @@ public class ChinaTotalScheduleTesk {
         dataEntity.setUpdateTime(update_time);
         //6.插入数据库(更新)
         chinaTotalService.save(dataEntity);
+
         //拿到areaTree
         JSONArray areaTree=jsonData.getJSONArray("worldlist");
         Object[] objects=areaTree.toArray();
@@ -80,8 +82,6 @@ public class ChinaTotalScheduleTesk {
             nocvGlobalData.setName(name.toString());
             nocvGlobalData.setValue(Integer.parseInt(value.toString()));
             nocvGlobalDataList.add(nocvGlobalData);
-            System.out.println(name.toString()+":"+value);
-
         }
         globalService.saveBatch(nocvGlobalDataList);
         //拿到中国的数据
@@ -91,25 +91,29 @@ public class ChinaTotalScheduleTesk {
 
         List<NocvData> nocvDataList=new ArrayList<>();
         for (int i=0;i<objects1.length;i++){
-//            NocvData nocvData=new NocvData();
-//            JSONObject jsonObject2=JSONObject.parseObject(objects1[i].toString());
-//            Object name=jsonObject2.get("name");//省份名字
-//            JSONObject jsonObject3=JSONObject.parseObject(objects1[i].toString());
-//            Object value=jsonObject3.get("value");//确诊数量
-////            JSONObject jsonObject4=JSONObject.parseObject(objects1[i].toString());
-////            Object name4=jsonObject4.get("name");//省份名字
-////            JSONObject jsonObject5=JSONObject.parseObject(objects1[i].toString());
-////            Object name5=jsonObject5.get("name");//省份名字
-//            System.out.println("省份->"+name+":"+value+"人");
-//            nocvData.setName(name.toString());
-//            nocvData.setValue(Integer.parseInt(value.toString()));
-//            if(update_time==null){
-//                nocvData.setUpdateTime(new Date());
-//            }else
-//                nocvData.setUpdateTime(update_time);
-//            nocvDataList.add(nocvData);
+            NocvData nocvData=new NocvData();
+            JSONObject jsonObject2=JSONObject.parseObject(objects1[i].toString());
+            Object name=jsonObject2.get("name");//省份名字
+            JSONObject jsonObject3=JSONObject.parseObject(objects1[i].toString());
+            Object value=jsonObject3.get("value");//确诊数量
+//            JSONObject jsonObject4=JSONObject.parseObject(objects1[i].toString());
+//            Object name4=jsonObject4.get("name");//省份名字
+//            JSONObject jsonObject5=JSONObject.parseObject(objects1[i].toString());
+//            Object name5=jsonObject5.get("name");//省份名字
+            nocvData.setName(name.toString());
+            nocvData.setValue(Integer.parseInt(value.toString()));
+            if(update_time==null){
+                nocvData.setUpdateTime(new Date());
+            }else
+                nocvData.setUpdateTime(update_time);
+            nocvDataList.add(nocvData);
         }
         //各个省份的数据插入数据库
         indexService.saveBatch(nocvDataList);
+        //7.删除缓存
+        Jedis jedis=new Jedis("127.0.0.1");
+        if(jedis!=null){
+            jedis.flushDB();
+        }
     }
 }

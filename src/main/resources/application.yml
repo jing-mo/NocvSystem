@@ -25,7 +25,7 @@ shiro:
     - /images/**
     - /layui/**
     - /layui_ext/**
-    - /menu/toMenu*
+    - /js/**
   login-url: /index2.html
   log-out-url: /login/loginout*
   authc-ulrs:

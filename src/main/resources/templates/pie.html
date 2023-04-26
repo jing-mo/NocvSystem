@@ -11,11 +11,9 @@
   <link rel="stylesheet" th:href="@{/layui/css/layui.css}"   media="all">
   <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
-<body>
-<!--layui引入公共模块-->
-<div th:include="commommenu :: menu">
-</div>
-<div class="layui-body">
+<body class="childrenBody">
+
+<div>
   <!-- 内容主体区域 -->
   <div style="padding: 15px;">
     <div id="main" style="width:900px;height:900px;"></div>

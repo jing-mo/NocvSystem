@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>菜单管理</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/layui/layui.js}" media="all"/>
+    <link rel="stylesheet" th:href="@{/css/login.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/layui_ext/dtree/dtree.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/layui_ext/dtree/font/dtreefont.css}" media="all"/>
+</head>
+<body class="childrenBody">
+    <!--添加和修改弹出层-->
+    <div id="addOrUpdateDiv" style="display: none;padding: 10px;padding-right: 5%">
+        <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
+            <div class="layui-form-item">
+                <label class="layui-form-label">父级菜单</label>
+                <div class="layui-input-block">
+                    <input type="hidden" name="pid" id="pid" lay-verify="required">
+                    <ul id="menuTree" class="dtree" data-id="0"></ul>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">菜单名称</label>
+                    <div class="layui-input-block">
+                        <input type="hidden" name="id">
+                        <input type="text" name="title" lay-verify="required" autocomplete="off"
+                               class="layui-input input-radius" placeholder="请输入菜单名称">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">菜单地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="href" autocomplete="off" class="layui-input input-radius" placeholder="请输入菜单地址">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">菜单图标</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="icon" autocomplete="off" class="layui-input input-radius" placeholder="请输入菜单图标">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">TARGET</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="target" autocomplete="off" class="layui-input input-radius" placeholder="请输入target">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否可用</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="available" value="1" title="可用" checked="">
+                        <input type="radio" name="available" value="0" title="不可用">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否展开</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="open" value="1" title="展开" checked="">
+                        <input type="radio" name="open" value="0" title="不展开">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">排序码</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="ordernum" name="ordernum" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入菜单排序码[>0]">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="text-align: center;padding-right: 7%">
+                    <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
+                            class="layui-icon layui-icon-search layui-icon-normal"></i>提交
+                    </button>
+                    <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
+                            class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <div>
+        <div class="layui-bg-gray" style="padding-top: 20px;">
+            <div class="layui-row layui-col-space15">
+<!--                <div class="layui-col-md2">-->
+<!--                    <div class="layui-panel">-->
+<!--                        &lt;!&ndash;左侧菜单&ndash;&gt;-->
+<!--                        <div th:include="menu/menuLeft :: menuLeft"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div class="layui-col-md10">
+                    <div class="layui-panel">
+                        <!--右侧菜单-->
+                        <div th:include="menu/menuRight :: menuRight"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

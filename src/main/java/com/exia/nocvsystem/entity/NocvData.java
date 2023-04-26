@@ -11,8 +11,9 @@ import java.util.Date;
 @Data
 @TableName("nocv_data")
 public class NocvData {
+    @TableId(value="id",type = IdType.AUTO)
     private Integer id;
-    @TableId
+
     private String name;
     private Integer value;
     private Date updateTime;

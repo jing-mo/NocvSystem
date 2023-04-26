@@ -10,7 +10,7 @@
         .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
     </style>
 </head>
-<body>
+<body class="childrenBody">
 <!--模态窗-->
 <div id= "addOrUpdateDiv" style="display: none;padding: 10px;padding-right: 5%">
     <form action="" method="post" id="searchFrm2" lay-filter="searchFrm2" class="layui-form">
@@ -102,9 +102,8 @@
 
     </form>
 </div>
-<!--layui公共模块-->
-<div th:include="commommenu :: menu"></div>
-<div class="layui-body">
+
+<div>
     <!-- 内容主体区域 -->
     <!--搜索条件-->
     <div style="padding-top: 5%">

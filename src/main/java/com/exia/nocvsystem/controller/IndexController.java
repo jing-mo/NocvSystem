@@ -1,20 +1,22 @@
 package com.exia.nocvsystem.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.exia.nocvsystem.entity.ChinaTotal;
 import com.exia.nocvsystem.entity.LineTrend;
 import com.exia.nocvsystem.entity.NocvData;
+import com.exia.nocvsystem.entity.NocvNews;
 import com.exia.nocvsystem.service.ChinaTotalService;
 import com.exia.nocvsystem.service.IndexService;
+import com.exia.nocvsystem.service.NocvNewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import redis.clients.jedis.Jedis;
 
-import java.text.Format;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -23,6 +25,8 @@ public class IndexController {
     private IndexService indexService;
     @Autowired
     private ChinaTotalService chinaTotalService;
+    @Autowired
+    private NocvNewsService nocvNewsService;
     //查询chinaTotal数据
     @RequestMapping("/")
     public String index(Model model) throws ParseException {
@@ -31,17 +35,104 @@ public class IndexController {
         //2.根据ID查找数据
         ChinaTotal chinaTotal=chinaTotalService.getById(id);
         model.addAttribute("chinaTotal",chinaTotal);
+
         return "index";
+    }
+    @RequestMapping("/toChina")
+    public String toChina(Model model) throws ParseException {
+        //1.找到ID最大的数据
+        Integer id=chinaTotalService.maxID();
+        //2.根据ID查找数据
+        Jedis jedis = new Jedis("127.0.0.1");
+        //redis查询数据库逻辑
+        /**
+         * 1.先查询缓存，有数据直接返回，没有数据查询mysql数据库，更新缓存，返回客户端
+         */
+        if (jedis!=null) {
+            String confirm = jedis.get("confirm");
+            String input = jedis.get("input");
+            String heal = jedis.get("heal");
+            String dead = jedis.get("dead");
+            String updateTime = jedis.get("updateTime");
+            if (StringUtils.isNotBlank(confirm)
+                    && StringUtils.isNotBlank(input)
+                    && StringUtils.isNotBlank(heal)
+                    && StringUtils.isNotBlank(dead)
+                    && StringUtils.isNotBlank(updateTime)) {
+                ChinaTotal chinaTotalRedis = new ChinaTotal();
+                chinaTotalRedis.setConfirm(Integer.parseInt(confirm));
+                chinaTotalRedis.setInput(Integer.parseInt(input));
+                chinaTotalRedis.setHeal(Integer.parseInt(heal));
+                chinaTotalRedis.setDead(Integer.parseInt(dead));
+                // 格式调整 String ----> Date
+                chinaTotalRedis.setUpdateTime(new Date());
+                System.out.println("redis中的数据：" + chinaTotalRedis);
+                // 扔回前台
+                model.addAttribute("chinaTotal", chinaTotalRedis);
+                // 3.疫情播报新闻
+                List<NocvNews> newsList = nocvNewsService.listNewsLimit5();
+                model.addAttribute("newsList", newsList);
+                return "china";
+            }
+        }else{
+            // 2.3 缓存里面没有数据 查询数据
+            ChinaTotal chinaTotal = chinaTotalService.getById(id);
+            model.addAttribute("chinaTotal",chinaTotal);
+            // 3.疫情播报新闻
+            List<NocvNews> newsList = nocvNewsService.listNewsLimit5();
+            model.addAttribute("newsList",newsList);
+            // 2.4 更新缓存
+            jedis.set("confirm",String.valueOf(chinaTotal.getConfirm()));
+            jedis.set("input",String.valueOf(chinaTotal.getInput()));
+            jedis.set("heal",String.valueOf(chinaTotal.getHeal()));
+            jedis.set("dead",String.valueOf(chinaTotal.getDead()));
+            jedis.set("updateTime",String.valueOf(chinaTotal.getUpdateTime()));
+
+            return "china";
+        }
+
+        ChinaTotal chinaTotal=chinaTotalService.getById(id);
+        model.addAttribute("chinaTotal",chinaTotal);
+        List<NocvNews> newsList=nocvNewsService.listNewsLimit5();
+        model.addAttribute("newsList",newsList);
+        return "china";
     }
     @RequestMapping("/query")
     @ResponseBody
     public List<NocvData> queryData() throws ParseException {
-        //每天更新一次数据使用场景
-//        QueryWrapper<NocvData> queryWrapper=new QueryWrapper<>();
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//        String format1=format.format(new Date());
-//        queryWrapper.ge("update_time",format.parse(format1));
-        List<NocvData> list=indexService.listOrOrderByLimit34();
+        // 1.先查redis缓存[List] 有数据返回即可
+        Jedis jedis = new Jedis("127.0.0.1");
+        if (jedis!=null){
+
+            // 1.1 有缓存数据 返回数据即可
+            List<String> listRedis = jedis.lrange("nocvdata", 0 ,33);
+            List<NocvData> dataList = new ArrayList<>();
+            if (listRedis.size()>0){
+                for(int i=0; i<listRedis.size(); i++) {
+                    System.out.println("列表项为: "+listRedis.get(i));
+                    String s = listRedis.get(i);
+                    JSONObject jsonObject = JSONObject.parseObject(s);
+                    Object name = jsonObject.get("name");
+                    Object value = jsonObject.get("value");
+                    NocvData nocvData = new NocvData();
+                    nocvData.setName(String.valueOf(name));
+                    nocvData.setValue(Integer.parseInt(value.toString()));
+                    dataList.add(nocvData);
+                }
+                // 查询redis缓存数据库 返回的数据
+                return dataList;
+            }else{
+                // 1.2 redis没有数据 查Mysql数据库,更新缓存
+                List<NocvData> list = indexService.listOrOrderByLimit34();
+                for (NocvData nocvData : list){
+                    jedis.lpush("nocvdata", JSONObject.toJSONString(nocvData));
+                }
+                // 返回的数据中的数据
+                return list;
+            }
+        }
+        // 默认没有连接redis的返回数据库【兼容有没有安装redis】
+        List<NocvData> list = indexService.listOrOrderByLimit34();
         return list;
     }
     //跳转pie页面

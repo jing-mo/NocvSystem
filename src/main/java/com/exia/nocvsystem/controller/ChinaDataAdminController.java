@@ -15,10 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,16 +25,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@RestController
 public class ChinaDataAdminController {
     @Autowired
     private IndexService indexService;
-    @RequestMapping("/toChinaManager")
-    public String toChinaManager(){
-        return "admin/chinadatamanager";
-    }
-    @RequestMapping("/listDataByPage")
-    @ResponseBody
+
+    @GetMapping(value = "/listDataByPage")
     public DataView listDataByPage(NocvDataView nocvDataView){
         //1.创建分页的对象 当前页 每页限制大小
         IPage<NocvData> page=new Page<>(nocvDataView.getPage(), nocvDataView.getLimit());
@@ -53,7 +46,6 @@ public class ChinaDataAdminController {
         return dataView;
     }
     @RequestMapping("/china/deleteById")
-    @ResponseBody
     public DataView deleteById(Integer id){
         indexService.removeById(id);
         DataView dataView=new DataView();
@@ -62,15 +54,9 @@ public class ChinaDataAdminController {
         return dataView;
     }
     //新增或修改,有值就是修改，没有值就是新增
-    @RequestMapping("/china/AddOrUpdateChina")
-    @ResponseBody
-    public DataView addChina(NocvDataView nocvDataView){
-        UpdateWrapper<NocvData> updateWrapper=new UpdateWrapper<NocvData>();
-        updateWrapper.eq("name",nocvDataView.getName());
-        NocvData nocvData=new NocvData();
-        nocvData.setName(nocvDataView.getName());
-        nocvData.setValue(nocvDataView.getValue());
-        boolean save=indexService.saveOrUpdate(nocvData,updateWrapper);
+    @PostMapping("/china/AddOrUpdateChina")
+    public DataView addChina(NocvData nocvData){
+        boolean save=indexService.saveOrUpdate(nocvData);
         DataView dataView=new DataView();
         if(save){
             dataView.setCode(200);
@@ -90,7 +76,6 @@ public class ChinaDataAdminController {
      */
 
     @RequestMapping(value = "/excelImportChina",method = RequestMethod.POST)
-    @ResponseBody
     public DataView excelImportChina(@RequestParam("file")MultipartFile file) throws IOException {
         DataView dataView=new DataView();
         //1.文件不能为空
@@ -127,7 +112,6 @@ public class ChinaDataAdminController {
         3.建立输出流，输出文件
      */
         @RequestMapping("/excelOutPortChina")
-        @ResponseBody
         public void excelOutPortChina(HttpServletResponse response) throws Exception {
             //1.查询数据库（查询所有，符合条件的数据项）
             List<NocvData> list = indexService.list();

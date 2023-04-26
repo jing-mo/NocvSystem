@@ -18,6 +18,6 @@ public class Menu {
     private String href;
     private Integer open;
     private Integer ordernum;
-
+    private Integer available;
 
 }
