@@ -62,15 +62,13 @@
 
     //提升数据表格的作用域，因为底下还有一个reloadTable方法
     var tableIns;
-
-    layui.extend({
-        dtree: '/layui_ext/dtree/dtree'
-    }).use(['jquery', 'form', 'layer', 'laydate', 'table', 'layedit','dtree'], function () {
+    var dtree = layui.dtree;
+    layui.use(['jquery', 'form', 'layer', 'laydate', 'table', 'layedit','dtree'], function () {
         var $ = layui.jquery;
         var form = layui.form;
         var layer = layui.layer;
         var table = layui.table;
-        var dtree = layui.dtree;
+
 
         //初始化表格 加载数据
         tableIns = table.render({

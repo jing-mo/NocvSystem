@@ -9,6 +9,7 @@
   <script th:src="@{/echarts/china.js}"></script>
   <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
   <link rel="stylesheet" th:href="@{/layui/css/layui.css}"   media="all">
+  <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
   <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body class="childrenBody">
@@ -35,7 +36,11 @@
       bottom: '3%',
       containLabel: true
     },
-
+    xAxis: [
+      {
+        type: 'value'
+      }
+    ],
     yAxis: [
       {
         type: 'value'
