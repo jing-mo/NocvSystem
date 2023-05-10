@@ -133,9 +133,9 @@
     </div>
   </div>
 
+
   <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
   <script type="text/javascript" th:src="@{/layui_ext/dtree/dtree.js}"></script>
-  <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
   <script type="text/javascript">
 
     //提升数据表格的作用域，因为底下还有一个reloadTable方法
@@ -165,8 +165,7 @@
         url: "/hesuan/loadAllHeSuan",
         toolbar: "#menuToolBar",
         page: true,
-        width:1500,
-        height: "full-130",
+        height: "auto",
         cols: [ [
           {field: 'id', title: 'ID', align: 'center',width:'80'},
           {field: 'name', title: '姓名', align: 'center',width:'100'},
@@ -193,7 +192,7 @@
           {field: 'updateTime', title: '报告结果时间', align: 'center',width:'110',
             templet : "<div>{{layui.util.toDateString(d.updateTime, 'yyyy-MM-dd HH:mm:ss')}}</div>",
           },
-          ,{fixed: 'right', width: 200, align:'center', toolbar: '#menuRowBar'}
+          {fixed: 'right', title: '操作', toolbar: '#menuRowBar', align: 'center',width:'180'}
         ] ],
         done: function (data, curr, count) {
           //不是第一页时，如果当前返回的数据为0那么就返回上一页
@@ -261,41 +260,38 @@
         });
       }
 
-      //打开修改的弹出层
-      function updateMenu(data) {
-        mainIndex = layer.open({
-          type:1,
-          content:$("#addOrUpdateDiv"),
-          area:['800px','450px'],
-          title:'修改菜单',
-          success:function () {
-            //清空原有的数据
-            $("#dataFrm")[0].reset();
-            //装载新的数据
-            form.val("dataFrm",data);
-            //选中之前的父级菜单  nodeId=data.pid
-            dtree.dataInit("menuTree",data.pid);
-            dtree.selectVal("menuTree");
-            url="/hesuan/updateHeSuan";
-          }
-        });
-      }
+        //打开修改的弹出层
+        function updateMenu(data) {
+            mainIndex = layer.open({
+                type:1,
+                content:$("#addOrUpdateDiv"),
+                area:['800px','450px'],
+                title:'修改核酸记录',
+                success:function () {
+                    //清空原有的数据
+                    $("#dataFrm")[0].reset();
+                    //装载新的数据
+                    form.val("dataFrm",data);
+                    url="/hesuan/updateHeSuan";
+                }
+            });
+        }
 
-      form.on("submit(doSubmit)",function (data) {
-        $.post(url,data.field,function (res) {
-          if (res.code==200){
-            tableIns.reload();
-          }
-          layer.msg(res.msg);
-          layer.close(mainIndex);
+        form.on("submit(doSubmit)",function (data) {
+            $.post(url,data.field,function (res) {
+                if (res.code==200){
+                    tableIns.reload();
+                }
+                layer.msg(res.msg);
+                layer.close(mainIndex);
+            });
+            return false;
         });
-        return false;
-      });
 
 
       //删除
       function deleteMenu(data) {
-        layer.confirm('你确定要删除【' + data.title + '】这个菜单吗？', {icon: 3, title: '提示'}, function (index) {
+        layer.confirm('你确定要删除【' + data.name + '】这条记录吗？', {icon: 3, title: '提示'}, function (index) {
           $.post("/hesuan/deleteHeSuan", {id: data.id},function (res) {
             if (res.code == 200) {
               tableIns.reload({

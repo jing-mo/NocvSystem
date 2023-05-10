@@ -24,8 +24,8 @@ public class Vaccine {
     private String card;
     private String zhenci;//针刺
     private String pici;//批次
-    private String changjia;//批次
-    private String danwei;//批次
+    private String changjia;//厂家
+    private String danwei;//单位
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 

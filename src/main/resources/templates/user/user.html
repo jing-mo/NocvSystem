@@ -138,15 +138,15 @@
       <div class="layui-inline">
         <label class="layui-form-label">年龄</label>
         <div class="layui-input-block">
-          <input type="text" name="age" id="age" class="layui-input input-radius" placeholder="请输入用户地址">
+          <input type="text" name="age" id="age" class="layui-input input-radius" placeholder="请输入年龄">
         </div>
       </div>
     </div>
     <div class="layui-form-item">
       <div class="layui-inline">
-        <label class="layui-form-label">学生卡号</label>
+        <label class="layui-form-label">学生/教工卡号</label>
         <div class="layui-input-block">
-          <input type="text" name="card" class="layui-input input-radius" placeholder="请输入学生卡号">
+          <input type="text" name="cardId" class="layui-input input-radius" placeholder="请输入学生/教工卡号">
         </div>
       </div>
       <div class="layui-inline">
@@ -160,8 +160,8 @@
       <div class="layui-inline">
         <label class="layui-form-label">用户性别</label>
         <div class="layui-input-block">
-          <input type="radio" name="sex" value="1" title="男" checked="">
-          <input type="radio" name="sex" value="0" title="女">
+          <input type="radio" name="sex" value="男" title="男" checked="">
+          <input type="radio" name="sex" value="女" title="女">
         </div>
       </div>
     </div>
@@ -201,7 +201,6 @@
     var form = layui.form;
     var layer = layui.layer;
     var table = layui.table;
-    var dtree = layui.dtree;
     var laydate = layui.laydate;
 
     //初始化时间选择器
@@ -230,7 +229,7 @@
             return '<img width=40 height=40 src='+'http://localhost:8080/'+d.img+ ' />';
           }},
         {field: 'phone', title: '手机', align: 'center', width: '100'},
-        {field: 'card', title: '身份证', align: 'center', width: '100'},
+        {field: 'cardId', title: '学生/教工卡号', align: 'center', width: '100'},
         {field: 'className', title: '班级', align: 'center', width: '100'},
         {field: 'institudeName', title: '学院', align: 'center', width: '100'},
         {field: 'teacherName', title: '老师', align: 'center', width: '100'},

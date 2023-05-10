@@ -30,3 +30,5 @@ shiro:
   log-out-url: /login/loginout*
   authc-ulrs:
     - /**
+
+

@@ -23,7 +23,7 @@ public class User {
     private Integer classId;
     private Integer institudeId;
     private Integer teacherId;
-    private Integer roleId;
+
     //非数据库列 班级名
     @TableField(exist=false)
     private String className;

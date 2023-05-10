@@ -32,6 +32,9 @@ public class HeSuanController {
     public DataView loadAllHeSuan(HeSuanVo heSuanVo){
         IPage<HeSuan> page=new Page<>(heSuanVo.getPage(),heSuanVo.getLimit());
         QueryWrapper<HeSuan> queryWrapper=new QueryWrapper();
+
+        queryWrapper.like(!(heSuanVo.getName() == null), "name", heSuanVo.getName());
+
         heSuanService.page(page,queryWrapper);
         return new DataView(page.getTotal(),page.getRecords());
     }

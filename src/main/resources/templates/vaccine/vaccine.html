@@ -17,9 +17,10 @@
         <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
             <div class="layui-form-item">
                 <div class="layui-inline">
+                    <input type="hidden" name="id">
                     <label class="layui-form-label">姓名</label>
                     <div class="layui-input-block">
-                        <input type="hidden" name="id">
+
                         <input type="text" name="name" lay-verify="required" autocomplete="off"
                                class="layui-input input-radius" placeholder="请输入姓名">
                     </div>
@@ -147,7 +148,6 @@
 
     <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
     <script type="text/javascript" th:src="@{/layui_ext/dtree/dtree.js}"></script>
-    <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
     <script type="text/javascript">
 
         //提升数据表格的作用域，因为底下还有一个reloadTable方法
@@ -268,9 +268,6 @@
                         $("#dataFrm")[0].reset();
                         //装载新的数据
                         form.val("dataFrm",data);
-                        //选中之前的父级菜单  nodeId=data.pid
-                        dtree.dataInit("menuTree",data.pid);
-                        dtree.selectVal("menuTree");
                         url="/vaccine/updateVaccine";
                     }
                 });
@@ -290,7 +287,7 @@
 
             //删除
             function deleteMenu(data) {
-                layer.confirm('你确定要删除【' + data.title + '】这个菜单吗？', {icon: 3, title: '提示'}, function (index) {
+                layer.confirm('你确定要删除【' + data.name + '】这个记录吗？', {icon: 3, title: '提示'}, function (index) {
                     $.post("/vaccine/deleteVaccine", {id: data.id},function (res) {
                         if (res.code == 200) {
                             tableIns.reload({

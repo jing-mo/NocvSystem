@@ -28,6 +28,10 @@ public class VaccineController {
     public String toVaccine(){
         return "vaccine/vaccine";
     }
+    @RequestMapping("/toVaccineAdmin")
+    public String toVaccineAdmin(){
+        return "vaccine/vaccineadmin";
+    }
     @RequestMapping("/loadAllVaccine")
     @ResponseBody
     public DataView loadAllVaccine(VaccineVo vaccineVo){
