@@ -50,35 +50,6 @@ public class LoginController {
     @ResponseBody
     public DataView login(String username,String password,String code,HttpSession session){
         DataView dataView=new DataView();
-//        //1.首先判断验证码对不对
-//        String sessionCode=(String)session.getAttribute("code");
-//        if(code!=null && sessionCode.equals(code)){
-//
-//            //2.session普通登录
-//            //User user=loginService.login(username,password);
-//            //shiro登录
-//            Subject subject= SecurityUtils.getSubject();
-//            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-//            subject.login(token);
-//            User user = (User) subject.getPrincipal();
-//            //User user=loginService.login(username,password);
-//            if(user!=null){
-//                dataView.setCode(200);
-//                dataView.setMsg("登录成功！");
-//                //放入session
-//                session.setAttribute("user",user);
-//                return dataView;
-//            }else{
-//                dataView.setCode(100);
-//                dataView.setMsg("用户名或者密码错误，登录失败！");
-//                return dataView;
-//            }
-//        }
-//        dataView.setCode(100);
-//        dataView.setMsg("验证码错误，登录失败！");
-//        return dataView;
-//
-//    }
         //            1.判断验证码是否正确
         String sessionCode = (String) session.getAttribute("code");
         if (code != null && sessionCode.equals(code)) {

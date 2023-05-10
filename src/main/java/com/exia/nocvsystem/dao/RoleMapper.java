@@ -38,4 +38,7 @@ public interface RoleMapper extends BaseMapper<Role> {
     void deleteRoleUserByUid(Integer uid);
     @Select("select mid from role_menu where rid = #{roleId}")
     List<Integer> queryAllPermissionByRid(Integer roleId);
+
+    @Select("select a.data_authority from role a,user_role b where a.id = b.rid and b.uid=#{uid}")
+    Integer queryDataAuthority(Integer uid);
 }

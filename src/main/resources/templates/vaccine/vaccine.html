@@ -76,28 +76,28 @@
                             </div>
                         </div>
                     </div>
-                <div class="layui-form-item">
-                <div class="layui-form">
                     <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">接种时间</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="createTime" class="layui-input" lay-verify="required" id="test1" placeholder="yyyy-MM-dd HH:mm:ss">
+                        <div class="layui-form">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">接种时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="createTime" class="layui-input" lay-verify="required" id="test1" placeholder="yyyy-MM-dd HH:mm:ss">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block" style="text-align: center;padding-right: 7%">
+                                <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
+                                        class="layui-icon layui-icon-search layui-icon-normal"></i>提交
+                                </button>
+                                <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
+                                        class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block" style="text-align: center;padding-right: 7%">
-                        <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
-                                class="layui-icon layui-icon-search layui-icon-normal"></i>提交
-                        </button>
-                        <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
-                                class="layui-icon layui-icon-refresh"></i><span>重置</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
                 </div>
             </div>
         </form>
@@ -153,9 +153,7 @@
         //提升数据表格的作用域，因为底下还有一个reloadTable方法
         var tableIns;
 
-        layui.extend({
-            dtree: '/layui_ext/dtree/dtree'
-        }).use(['jquery', 'form', 'layer', 'laydate', 'table', 'laydate','layedit','dtree'], function () {
+        layui.use(['jquery', 'form', 'layer', 'laydate', 'table', 'laydate','layedit',], function () {
             var $ = layui.jquery;
             var form = layui.form;
             var layer = layui.layer;

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/vaccine")
-public class VaccineController {
+public class VaccineController extends BaseController{
     @Autowired
     VaccineService vaccineService;
     @RequestMapping("/toVaccine")
@@ -37,6 +37,7 @@ public class VaccineController {
     public DataView loadAllVaccine(VaccineVo vaccineVo){
         IPage<Vaccine> page=new Page<>(vaccineVo.getPage(),vaccineVo.getLimit());
         QueryWrapper<Vaccine> queryWrapper=new QueryWrapper();
+        addCard(queryWrapper);
         vaccineService.page(page,queryWrapper);
         return new DataView(page.getTotal(),page.getRecords());
     }

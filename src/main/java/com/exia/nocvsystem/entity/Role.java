@@ -12,4 +12,8 @@ public class Role {
     private Integer id;
     private String name;
     private String remark;
+    /**
+     * 数据权限 1=自己 2=同班级 3=同学院 4=全部
+     */
+    private Integer dataAuthority;
 }

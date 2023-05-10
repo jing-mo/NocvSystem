@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/hesuan")
-public class HeSuanController {
+public class HeSuanController extends BaseController{
     @Autowired
     HeSuanService heSuanService;
     @RequestMapping("/toHeSuan")
@@ -28,13 +28,13 @@ public class HeSuanController {
         return "hesuan/hesuan";
     }
     @RequestMapping("/loadAllHeSuan")
+
     @ResponseBody
     public DataView loadAllHeSuan(HeSuanVo heSuanVo){
         IPage<HeSuan> page=new Page<>(heSuanVo.getPage(),heSuanVo.getLimit());
         QueryWrapper<HeSuan> queryWrapper=new QueryWrapper();
-
         queryWrapper.like(!(heSuanVo.getName() == null), "name", heSuanVo.getName());
-
+        addCard(queryWrapper);
         heSuanService.page(page,queryWrapper);
         return new DataView(page.getTotal(),page.getRecords());
     }
@@ -47,6 +47,7 @@ public class HeSuanController {
         dataView.setMsg("核酸信息添加成功");
         return dataView;
     }
+
     @RequestMapping("/deleteHeSuan")
     @ResponseBody
     public DataView deleteHeSuan(HeSuan heSuan){
@@ -56,6 +57,7 @@ public class HeSuanController {
         dataView.setMsg("核酸信息删除成功");
         return dataView;
     }
+
     @RequestMapping("/updateHeSuan")
     @ResponseBody
     public DataView updateHeSuan(HeSuan heSuan){
@@ -65,4 +67,5 @@ public class HeSuanController {
         dataView.setMsg("核酸信息修改成功");
         return dataView;
     }
+
 }

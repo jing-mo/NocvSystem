@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/approval")
-public class ApprovalController {
+public class ApprovalController extends BaseController {
     @Autowired
     ApprovalService approvalService;
     @Autowired
@@ -50,6 +50,7 @@ public class ApprovalController {
             IPage<ApprovalProcess> page = new Page<>(approvalVo.getPage(), approvalVo.getLimit());
             QueryWrapper<ApprovalProcess> queryWrapper = new QueryWrapper();
             queryWrapper.ge(StringUtils.isNotBlank(String.valueOf(uid)), "uid", uid);
+            addUids(queryWrapper);
             approvalService.page(page, queryWrapper);
             //处理用户名
             List<ApprovalProcess> records=page.getRecords();
@@ -69,17 +70,17 @@ public class ApprovalController {
         approvalProcess.setUid(id);
         List<Integer> roleList = roleService.queryUserRoleById(id);
         Integer integer = roleList.get(0);
-            Role byId = roleService.getById(integer);
-            String name = byId.getName();
-            if(StringUtils.equals(name,"admin")||StringUtils.equals(name,"student")){
-                approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_TEACHER_ING.getCode());
-            }else if(StringUtils.equals(name,"teacher")){
-                approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_COLLEGE_ING.getCode());
-            }else if(StringUtils.equals(name,"dean")){
-                approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_COLLEGE_PASSED.getCode());
-            }else{
-                approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_TEACHER_ING.getCode());
-            }
+        Role byId = roleService.getById(integer);
+        String name = byId.getName();
+        if(StringUtils.equals(name,"admin")||StringUtils.equals(name,"student")){
+            approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_TEACHER_ING.getCode());
+        }else if(StringUtils.equals(name,"teacher")){
+            approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_COLLEGE_ING.getCode());
+        }else if(StringUtils.equals(name,"dean")){
+            approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_COLLEGE_PASSED.getCode());
+        }else{
+            approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_TEACHER_ING.getCode());
+        }
         approvalService.save(approvalProcess);
         DataView dataView=new DataView();
         dataView.setCode(200);

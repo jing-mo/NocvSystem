@@ -92,6 +92,20 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
+                <label class="layui-form-label">数据权限</label>
+                <div class="layui-input-block">
+                    <select name="dataAuthority" id="dataAuthority" lay-filter="dataAuthority">
+                        <option value="1">只看自己</option>
+                        <option value="2">同班级</option>
+                        <option value="3">同学院</option>
+                        <option value="4">全部</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
                 <label class="layui-form-label">角色备注</label>
                 <div class="layui-input-block">
                     <textarea placeholder="请输入内容" class="layui-textarea" name="remark" cols="200"></textarea>
@@ -149,6 +163,17 @@
                 {field: 'id', title: 'ID', align: 'center'},
                 {field: 'name', title: '角色名称', align: 'center'},
                 {field: 'remark', title: '角色备注', align: 'center'},
+                {field: 'dataAuthority', title: '数据权限', align: 'center',templet:
+                        function (data) {
+                            if (data.dataAuthority ==1){
+                                return '<span class=\"layui-badge layui-bg-orange\">只看自己</span>'
+                            }else if(data.dataAuthority == 2){
+                                return '<span class=\"layui-badge layui-bg-red\">同班级</span>'
+                            }else if (data.dataAuthority == 3){
+                                return '<span class=\"layui-badge layui-bg-green\">同学院</span>'
+                            }
+                            return '<span class=\"layui-badge layui-bg-green\">全部</span>'
+                        }},
                 {fixed: 'right', title: '操作', toolbar: '#roleRowBar', align: 'center',width:280}
             ] ],
             done:function (data, curr, count) {
@@ -186,7 +211,7 @@
             switch (obj.event) {
                 case 'add':
                     openAddLayer();
-                break;
+                    break;
             };
         });
 
@@ -200,10 +225,10 @@
                     break;
                 case 'delete':
                     deleteRole(data);
-                break;
+                    break;
                 case 'selectPermission':
                     selectPermission(data);
-                break;
+                    break;
             };
         });
 

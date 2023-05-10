@@ -26,6 +26,8 @@ public class HealthClock {
     private String healthStatus;
     private Date createTime;
 
+    private String card;
+
     public String getUsername() {
         return username;
     }
