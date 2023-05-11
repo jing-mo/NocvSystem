@@ -10,6 +10,7 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -22,8 +23,16 @@ public class UserRealm extends AuthorizingRealm{
         QueryWrapper<User> queryWrapper=new QueryWrapper<User>();
         queryWrapper.eq("username", token.getPrincipal().toString());
         User user = loginService.getOne(queryWrapper);
+        Object username=user.getUsername();
+        Object password=user.getPassword();
         if(user!=null){
-            SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(),this.getName());
+            AuthenticationInfo info = new SimpleAuthenticationInfo(
+                    username,
+                    password,
+                    ByteSource.Util.bytes(user.getSalt()),
+                    this.getName() // realm的名字
+            );
+
             return info;
         }
         return null;

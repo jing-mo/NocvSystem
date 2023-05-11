@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import org.apache.shiro.crypto.hash.SimpleHash;
+
 @TableName("user")
 @Data
 public class User {
@@ -33,4 +35,12 @@ public class User {
     //非数据库列 老师名
     @TableField(exist=false)
     private String teacherName;
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }

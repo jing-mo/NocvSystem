@@ -42,7 +42,7 @@ public class ApprovalController extends BaseController {
     }
     @RequestMapping("/loadAllApproval")
     @ResponseBody
-    public DataView loadAllHeSuan(ApprovalVo approvalVo, HttpSession httpSession){
+    public DataView loadAllApproval(ApprovalVo approvalVo, HttpSession httpSession){
         User user=(User) httpSession.getAttribute("user");
         if(StringUtils.isNotEmpty(user.getUsername())) {
             String username = user.getUsername();
@@ -171,6 +171,15 @@ public class ApprovalController extends BaseController {
                 approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_TEACHER_PASSED.getCode());
             }
 
+            //更新库
+            approvalService.updateById(approvalProcess);
+            dataView.setCode(200);
+            dataView.setMsg(username+":角色:"+rolename+"审批成功！");
+            return dataView;
+        }else if(StringUtils.equals(ApprovalNodeStatusEnum.APPROVAL_TEACHER_PASSED.getCode(),nodeStatus)){
+            if(StringUtils.equals(rolename,"admin")||StringUtils.equals(rolename,"dean")){
+                approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_COLLEGE_PASSED.getCode());
+            }
             //更新库
             approvalService.updateById(approvalProcess);
             dataView.setCode(200);

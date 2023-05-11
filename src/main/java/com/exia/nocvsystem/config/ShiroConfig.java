@@ -6,6 +6,9 @@ import com.exia.nocvsystem.realm.UserRealm;
 import lombok.Data;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.crypto.RandomNumberGenerator;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -37,9 +40,12 @@ public class ShiroConfig {
     private static final String SHIRO_DIALECT = "shiroDialect";
     private static final String SHIRO_FILTER = "shiroFilter";
     // 加密方式
-    private String hashAlgorithmName = "md5";
+    public static String hashAlgorithmName = "md5";
     // 散列次数
-    private int hashIterations = 2;
+    public static int hashIterations = 10;
+
+    //true指定Hash散列值使用Hex加密存. false表明hash散列值用用Base64-encoded存储
+    private static final boolean storedCredentialsHexEncoded = true;
     // 默认的登陆页面
     private String loginUrl = "/index2.html";
 
@@ -50,13 +56,21 @@ public class ShiroConfig {
     /**
      * 声明凭证匹配器
      */
-    /*@Bean("credentialsMatcher")
-    public HashedCredentialsMatcher hashedCredentialsMatcher() {
+
+
+    @Bean("credentialsMatcher")
+    public HashedCredentialsMatcher credentialsMatcher(){
         HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
+        //加密算法的名字，也可以设置MD5等其他加密算法名字
         credentialsMatcher.setHashAlgorithmName(hashAlgorithmName);
+        //加密次数
         credentialsMatcher.setHashIterations(hashIterations);
+        //加密为哈希
+        credentialsMatcher.setStoredCredentialsHexEncoded(storedCredentialsHexEncoded);
+
         return credentialsMatcher;
-    }*/
+    }
+
 
     /**
      * 声明userRealm
@@ -64,7 +78,49 @@ public class ShiroConfig {
     @Bean("userRealm")
     public UserRealm userRealm() {
         UserRealm userRealm = new UserRealm();
+        //设置加密算法
+        userRealm.setCredentialsMatcher(credentialsMatcher());
         return userRealm;
+    }
+
+
+    /**
+     * 获得加密后的凭证
+     *
+     * @param credentials 凭证(即密码)
+     * @param salt        盐
+     * @return
+     */
+    public static String createCredentials(String credentials, String salt) {
+        SimpleHash simpleHash = new SimpleHash(hashAlgorithmName, credentials,
+                salt, hashIterations);
+        return storedCredentialsHexEncoded ? simpleHash.toHex() : simpleHash.toBase64();
+
+    }
+
+    /**
+     * 随机数生成器
+     */
+    private static RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
+    /**
+     * 获得加密用的盐
+     *
+     * @return
+     */
+    public static String createSalt() {
+        return randomNumberGenerator.nextBytes().toHex();
+    }
+
+    /**
+     * 进行密码验证
+     *
+     * @param credentials        未加密的密码
+     * @param salt               盐
+     * @param encryptCredentials 加密后的密码
+     * @return
+     */
+    public static boolean checkCredentials(String credentials, String salt, String encryptCredentials) {
+        return encryptCredentials.equals(createCredentials(credentials, salt));
     }
 
     /**
@@ -145,7 +201,6 @@ public class ShiroConfig {
         advisorAutoProxyCreator.setProxyTargetClass(true);
         return advisorAutoProxyCreator;
     }
-    /* 加入注解的使用，不加入这个注解不生效--结束 */
 
     /**
      * 这里是为了能在html页面引用shiro标签，上面两个函数必须添加，不然会报错

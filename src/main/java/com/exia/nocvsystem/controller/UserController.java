@@ -3,6 +3,7 @@ package com.exia.nocvsystem.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.exia.nocvsystem.config.ShiroConfig;
 import com.exia.nocvsystem.entity.Institude;
 import com.exia.nocvsystem.entity.Class;
 import com.exia.nocvsystem.entity.User;
@@ -25,6 +26,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import static com.exia.nocvsystem.config.ShiroConfig.checkCredentials;
+import static com.exia.nocvsystem.config.ShiroConfig.createCredentials;
+
 
 /**
  * @author exia
@@ -107,10 +112,24 @@ public class UserController {
     @RequestMapping("/addUser")
     @ResponseBody
     public DataView addUser(User user) {
+        String salt= ShiroConfig.createSalt();
+        user.setSalt(salt);
+        String nowPassword=user.getPassword();
+        //凭证+盐加密后得到的密码
+        String credentials = createCredentials(nowPassword, salt);
+        user.setPassword(credentials);
+        System.out.println(checkCredentials(nowPassword,salt,credentials));
+        if(checkCredentials(nowPassword,salt,credentials)){
+            boolean save = userService.save(user);
+            DataView dataView = new DataView();
+            dataView.setMsg("用户添加成功!");
+            dataView.setCode(200);
+            return dataView;
+        }
         boolean save = userService.save(user);
         DataView dataView = new DataView();
-        dataView.setMsg("用户添加成功!");
-        dataView.setCode(200);
+        dataView.setMsg("用户添加失败!");
+        dataView.setCode(300);
         return dataView;
     }
 
@@ -137,6 +156,7 @@ public class UserController {
     @RequestMapping("/updateUser")
     @ResponseBody
     public DataView updateUser(User user) {
+
         userService.updateById(user);
         DataView dataView = new DataView();
         dataView.setMsg("用户修改成功");
