@@ -79,7 +79,6 @@ public class MenuController {
     @ResponseBody
     public DataView addMenu(Menu menu) {
         DataView dataView = new DataView();
-        menu.setType("menu");
         boolean save = menuService.save(menu);
         if (!save) {
             dataView.setMsg("插入数据失败");

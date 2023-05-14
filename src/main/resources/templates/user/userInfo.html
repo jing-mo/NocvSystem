@@ -11,58 +11,52 @@
   <div class="layui-col-md3 layui-col-xs12 user_right" style="position: center">
     <div class="layui-upload-list userFace" style="margin: 40px; position: center">
       <input type="hidden" name="imgpath" th:name="id" id="imgpath">
-      <img class="layui-upload-img layui-circle userFaceBtn userAvatar" style="width: 200px;height: 200px" th:src="${session.user.img}" id="userFace">
+      <img class="layui-upload-img layui-circle userFaceBtn userAvatar" style="width: 200px;height: 200px" th:src="${user.img}" id="userFace">
     </div>
-    <button type="button" style="margin: 30px" class="layui-btn layui-btn-primary userFaceBtn"><i class="layui-icon">&#xe67c;</i> 掐指一算，我要换一个头像了</button>
+    <button type="button" style="margin: 30px" class="layui-btn layui-btn-primary userFaceBtn"><i class="layui-icon">&#xe67c;</i> 点击此处更换头像</button>
   </div>
   <div class="layui-col-md6 layui-col-xs12">
     <div class="layui-form-item">
       <label class="layui-form-label">用户名</label>
       <div class="layui-input-block">
-        <input type="hidden" class="id" name="id" th:value="${session.user.id}">
-        <input type="text" value="" id="name" th:value="${session.user.username}" disabled class="layui-input layui-disabled">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">登陆名</label>
-      <div class="layui-input-block">
-        <input type="text" value="" id="loginname" th:value="${session.user.username}" disabled class="layui-input layui-disabled">
+        <input type="hidden" class="id" name="id" th:value="${user.id}">
+        <input type="text" value="" id="name" th:value="${user.username}" class="layui-input">
       </div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">密码</label>
       <div class="layui-input-block">
-        <input type="text" value="" name="password" id="remark" th:value="${session.user.password}" class="layui-input">
+        <input type="text" value="" name="password" id="remark" placeholder="请输入新密码" class="layui-input">
       </div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">性别</label>
       <div class="layui-input-block">
-        <input type="text" value="" name="sex" id="sex" th:value="${session.user.sex}" class="layui-input">
+        <input type="text" value="" name="sex" id="sex" th:value="${user.sex}" class="layui-input">
       </div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">年龄</label>
       <div class="layui-input-block">
-        <input type="text" value="" id="age" name="age" th:value="${session.user.age}" class="layui-input">
+        <input type="text" value="" id="age" name="age" th:value="${user.age}" class="layui-input">
       </div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">用户地址</label>
       <div class="layui-input-block">
-        <input type="text" value="" id="address" name="address" th:value="${session.user.address}" class="layui-input">
+        <input type="text" value="" id="address" name="address" th:value="${user.address}" class="layui-input">
       </div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">电话号码</label>
       <div class="layui-input-block">
-        <input type="text" value="" id="phone" name="phone" lay-verify="phone" th:value="${session.user.phone}" class="layui-input">
+        <input type="text" value="" id="phone" name="phone" lay-verify="phone" th:value="${user.phone}" class="layui-input">
       </div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">校园卡号</label>
       <div class="layui-input-block">
-        <input type="text" value="" id="cardId" name="cardId" th:value="${session.user.cardId}" class="layui-input">
+        <input type="text" value="" id="cardId" name="cardId" th:value="${user.cardId}" disabled class="layui-input layui-disabled">
       </div>
     </div>
     <div class="layui-form-item">

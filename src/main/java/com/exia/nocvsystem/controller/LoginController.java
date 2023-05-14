@@ -3,6 +3,7 @@ package com.exia.nocvsystem.controller;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import com.exia.nocvsystem.entity.User;
+import com.exia.nocvsystem.realm.PasswordHelper;
 import com.exia.nocvsystem.service.LoginService;
 import com.exia.nocvsystem.vo.DataView;
 import org.apache.shiro.SecurityUtils;
@@ -48,17 +49,25 @@ public class LoginController {
     //登录
     @RequestMapping("/login/login")
     @ResponseBody
-    public DataView login(String username,String password,String code,HttpSession session){
+    public DataView login(String cardId,String password,String code,HttpSession session){
         DataView dataView=new DataView();
+        if(cardId==null||password==null){
+            dataView.setCode(100);
+            dataView.setMsg("用户名或密码为空！");
+            return dataView;
+        }
+
         //            1.判断验证码是否正确
         String sessionCode = (String) session.getAttribute("code");
+        String salt=loginService.FindSalt(cardId);
+        password= PasswordHelper.createCredentials(password,salt);
         if (code != null && sessionCode.equals(code)) {
             //2.session普通登录逻辑
 //            User user=userService.login(username,password);
             //shiro登录
             try {
                 Subject subject = SecurityUtils.getSubject();
-                UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+                UsernamePasswordToken token = new UsernamePasswordToken(cardId, password);
                 //拿到前台信息
                 subject.login(token);
                 ////拿到信息

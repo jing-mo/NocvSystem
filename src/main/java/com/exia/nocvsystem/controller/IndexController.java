@@ -73,24 +73,23 @@ public class IndexController {
                 List<NocvNews> newsList = nocvNewsService.listNewsLimit5();
                 model.addAttribute("newsList", newsList);
                 return "china";
+            } else {
+                // 2.3 缓存里面没有数据 查询数据
+                ChinaTotal chinaTotal = chinaTotalService.getById(id);
+                model.addAttribute("chinaTotal", chinaTotal);
+                // 3.疫情播报新闻
+                List<NocvNews> newsList = nocvNewsService.listNewsLimit5();
+                model.addAttribute("newsList", newsList);
+                // 2.4 更新缓存
+                jedis.set("confirm", String.valueOf(chinaTotal.getConfirm()));
+                jedis.set("input", String.valueOf(chinaTotal.getInput()));
+                jedis.set("heal", String.valueOf(chinaTotal.getHeal()));
+                jedis.set("dead", String.valueOf(chinaTotal.getDead()));
+                jedis.set("updateTime", String.valueOf(chinaTotal.getUpdateTime()));
+
+                return "china";
             }
-        }else{
-            // 2.3 缓存里面没有数据 查询数据
-            ChinaTotal chinaTotal = chinaTotalService.getById(id);
-            model.addAttribute("chinaTotal",chinaTotal);
-            // 3.疫情播报新闻
-            List<NocvNews> newsList = nocvNewsService.listNewsLimit5();
-            model.addAttribute("newsList",newsList);
-            // 2.4 更新缓存
-            jedis.set("confirm",String.valueOf(chinaTotal.getConfirm()));
-            jedis.set("input",String.valueOf(chinaTotal.getInput()));
-            jedis.set("heal",String.valueOf(chinaTotal.getHeal()));
-            jedis.set("dead",String.valueOf(chinaTotal.getDead()));
-            jedis.set("updateTime",String.valueOf(chinaTotal.getUpdateTime()));
-
-            return "china";
         }
-
         ChinaTotal chinaTotal=chinaTotalService.getById(id);
         model.addAttribute("chinaTotal",chinaTotal);
         List<NocvNews> newsList=nocvNewsService.listNewsLimit5();

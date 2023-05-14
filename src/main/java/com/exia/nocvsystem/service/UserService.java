@@ -5,4 +5,5 @@ import com.exia.nocvsystem.entity.User;
 
 public interface UserService extends IService<User> {
     void saveUserRole(Integer uid, Integer[] ids);
+    String findTeacher(String teacherId);
 }

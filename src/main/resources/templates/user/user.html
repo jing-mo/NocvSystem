@@ -96,17 +96,15 @@
     <div class="layui-form-item">
       <label class="layui-form-label">所属班级</label>
       <div class="layui-input-block">
-        <select name="classId" id="class" lay-filter="aihao">
+        <select name="classId" id="class" >
           <option value=""></option>
-          <option value="0">写作</option>
         </select>
       </div>
       <div class="layui-form-item">
         <label class="layui-form-label">所属学院</label>
         <div class="layui-input-block">
-          <select name="institudeId" id="institude" lay-filter="aihao">
+          <select name="institudeId" id="institude" >
             <option value=""></option>
-            <option value="0">写作</option>
           </select>
         </div>
       </div>
@@ -166,6 +164,13 @@
         </div>
       </div>
       <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">老师教工号</label>
+          <div class="layui-input-block">
+            <input type="text" name="teacherId" id="teacherId" class="layui-input input-radius" placeholder="如是老师角色的用户输入自己的教工号">
+          </div>
+        </div>
+      <div class="layui-form-item">
         <div class="layui-input-block" style="text-align: center;padding-right: 7%">
           <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit"
                   id="doSubmit"><i
@@ -212,7 +217,7 @@
     //初始化表格 加载数据
     tableIns = table.render({
       elem: "#userTable",
-      title: "部门数据表格",
+      title: "用户数据表格",
       url: "/user/loadAllUser",
       toolbar: "#userToolBar",
       page: true,
@@ -309,7 +314,7 @@
             var dom_class=$("#class");
             var html="<option value=''>选择班级</option>";
             $.each(banji,function(index,item){
-              html+="<option value=''>"+item.name+"</option>";
+              html+="<option value='"+item.id+"'>"+item.name+"</option>";
             });
             dom_class.html(html);
             form.render("select");
@@ -320,7 +325,7 @@
             var dom_institude=$("#institude");
             var html="<option value=''>选择学院</option>";
             $.each(institude,function(index,item){
-              html+="<option value=''>"+item.name+"</option>";
+              html+="<option value='"+item.id+"'>"+item.name+"</option>";
             });
             dom_institude.html(html);
             form.render("select");
@@ -345,7 +350,7 @@
             var dom_class=$("#class");
             var html="<option value=''>选择班级</option>";
             $.each(banji,function(index,item){
-              html+="<option value=''>"+item.name+"</option>";
+              html+="<option value='"+item.id+"'>"+item.name+"</option>";
             });
             dom_class.html(html);
             form.render("select");
@@ -356,7 +361,7 @@
             var dom_institude=$("#institude");
             var html="<option value=''>选择学院</option>";
             $.each(institude,function(index,item){
-              html+="<option value=''>"+item.name+"</option>";
+              html+="<option value='"+item.id+"'>"+item.name+"</option>";
             });
             dom_institude.html(html);
             form.render("select");

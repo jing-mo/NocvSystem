@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface LoginService extends IService<User> {
-    User login(String username, String password);
+    //User login(String username, String password);
+    String FindSalt(String cardId);
 
 }

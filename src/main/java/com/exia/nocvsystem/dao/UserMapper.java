@@ -14,7 +14,8 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select card_id from user where class_id = #{classId}")
     List<String> queryCardIdByClassId(Integer classId);
 
-
+    @Select("select u.username from user u,approval_process a where u.id = a.uid and a.uid=#{uid}")
+    List<String> queryUidName(Integer uid);
 
     @Select("select card_id from user where institude_id = #{institudeId}")
     List<String> queryCardIdByInstitudeId(Integer institudeId);
@@ -27,4 +28,6 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select id from user where institude_id = #{institudeId}")
     List<Integer> queryUidByInstitudeId(Integer institudeId);
 
+    @Select("select username from user where card_id = #{teacherId}")
+    List<String> queryUidByTeacherId(String teacherId);
 }

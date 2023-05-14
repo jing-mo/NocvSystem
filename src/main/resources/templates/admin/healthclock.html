@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">卡号</label>
+            <label class="layui-form-label">学生/教工卡号</label>
             <div class="layui-input-inline">
                 <input type="text" name="card" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
             </div>
@@ -43,7 +43,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">手机号</label>
             <div class="layui-input-inline">
-                <input type="text" name="phone" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+                <input type="text" name="phone" required  lay-verify="required phone" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -191,7 +191,7 @@
             ,cols: [ [ //表头
                 {type: 'checkbox', fixed: 'left'}
                 ,{field: 'id', title: 'ID', width:50,fixed: 'left'}
-                ,{field: 'card', title: '学生卡号', width:120}
+                ,{field: 'card', title: '学生/教工卡号', width:120}
                 ,{field: 'username', title: '姓名', width:80}
                 ,{field: 'sex', title: '性别', width:80}
                 ,{field: 'age', title: '年龄', width:80}

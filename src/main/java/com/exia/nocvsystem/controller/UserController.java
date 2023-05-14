@@ -3,16 +3,19 @@ package com.exia.nocvsystem.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.exia.nocvsystem.config.ShiroConfig;
 import com.exia.nocvsystem.entity.Institude;
 import com.exia.nocvsystem.entity.Class;
 import com.exia.nocvsystem.entity.User;
+import com.exia.nocvsystem.realm.PasswordHelper;
 import com.exia.nocvsystem.service.*;
 import com.exia.nocvsystem.vo.DataView;
 import com.exia.nocvsystem.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,10 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import static com.exia.nocvsystem.config.ShiroConfig.checkCredentials;
-import static com.exia.nocvsystem.config.ShiroConfig.createCredentials;
-
+import java.util.UUID;
 
 /**
  * @author exia
@@ -38,7 +38,7 @@ import static com.exia.nocvsystem.config.ShiroConfig.createCredentials;
  */
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends BaseController{
     @Autowired
     private UserService userService;
     @Autowired
@@ -59,7 +59,10 @@ public class UserController {
     }
 
     @RequestMapping("/toUserInfo")
-    public String toUserInfo() {
+    public String toUserInfo(Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        model.addAttribute("user",userService.getById(user.getId()));
         return "user/userinfo";
     }
 
@@ -93,13 +96,15 @@ public class UserController {
             }
             //为学院名字进行赋值
             if (user.getInstitudeId() != null) {
+
                 Institude institude = institudeService.getById(user.getInstitudeId());
+
                 user.setInstitudeName(institude.getName());
             }
             //为老师名字进行赋值
             if (user.getInstitudeId() != null) {
-                User teacher = userService.getById(user.getTeacherId());
-                user.setTeacherName(teacher.getUsername());
+                String teacher = userService.findTeacher(user.getTeacherId());
+                user.setTeacherName(teacher);
             }
         }
 
@@ -112,24 +117,23 @@ public class UserController {
     @RequestMapping("/addUser")
     @ResponseBody
     public DataView addUser(User user) {
-        String salt= ShiroConfig.createSalt();
+        String password=user.getPassword();
+        String salt= PasswordHelper.createSalt();
         user.setSalt(salt);
-        String nowPassword=user.getPassword();
-        //凭证+盐加密后得到的密码
-        String credentials = createCredentials(nowPassword, salt);
-        user.setPassword(credentials);
-        System.out.println(checkCredentials(nowPassword,salt,credentials));
-        if(checkCredentials(nowPassword,salt,credentials)){
-            boolean save = userService.save(user);
+        user.setImg("/images/default.jpg");
+        String newPassword=PasswordHelper.createCredentials(password,salt);
+        if(PasswordHelper.checkCredentials(password,salt,newPassword)){
+            user.setPassword(newPassword);
+        }else{
             DataView dataView = new DataView();
-            dataView.setMsg("用户添加成功!");
-            dataView.setCode(200);
+            dataView.setMsg("用户添加失败");
+            dataView.setCode(300);
             return dataView;
         }
-        boolean save = userService.save(user);
+        userService.save(user);
         DataView dataView = new DataView();
-        dataView.setMsg("用户添加失败!");
-        dataView.setCode(300);
+        dataView.setMsg("用户添加成功!");
+        dataView.setCode(200);
         return dataView;
     }
 
@@ -156,12 +160,30 @@ public class UserController {
     @RequestMapping("/updateUser")
     @ResponseBody
     public DataView updateUser(User user) {
-
-        userService.updateById(user);
-        DataView dataView = new DataView();
-        dataView.setMsg("用户修改成功");
-        dataView.setCode(200);
-        return dataView;
+        try{
+            String password=user.getPassword();
+            String salt= PasswordHelper.createSalt();
+            user.setSalt(salt);
+            String newPassword=PasswordHelper.createCredentials(password,salt);
+            if(PasswordHelper.checkCredentials(password,salt,newPassword)){
+                user.setPassword(newPassword);
+            }else{
+                DataView dataView = new DataView();
+                dataView.setMsg("用户修改失败");
+                dataView.setCode(100);
+                return dataView;
+            }
+            userService.updateById(user);
+            DataView dataView = new DataView();
+            dataView.setMsg("用户修改成功");
+            dataView.setCode(200);
+            return dataView;
+        } catch (Exception e){
+            DataView dataView = new DataView();
+            dataView.setMsg("用户修改失败");
+            dataView.setCode(100);
+            return dataView;
+        }
     }
 
     @RequestMapping("/deleteUser/{id}")
@@ -182,7 +204,17 @@ public class UserController {
     public DataView resetPwd(@PathVariable("id") Integer id) {
         User user = new User();
         user.setId(id);
-        user.setPassword("123456");
+        String salt= PasswordHelper.createSalt();
+        user.setSalt(salt);
+        String newPassword=PasswordHelper.createCredentials("123456",salt);
+        if(PasswordHelper.checkCredentials("123456",salt,newPassword)){
+            user.setPassword(newPassword);
+        }else{
+            DataView dataView = new DataView();
+            dataView.setMsg("用户添加失败");
+            dataView.setCode(300);
+            return dataView;
+        }
         userService.updateById(user);
         DataView dataView = new DataView();
         dataView.setMsg("用户重置密码成功");
@@ -220,11 +252,18 @@ public class UserController {
     @RequestMapping("/saveUserRole")
     @ResponseBody
     public DataView saveUserRole(Integer uid, Integer[] ids) {
-        userService.saveUserRole(uid, ids);
-        DataView dataView = new DataView();
-        dataView.setMsg("用户分配角色成功");
-        dataView.setCode(200);
-        return dataView;
+        try {
+            userService.saveUserRole(uid, ids);
+            DataView dataView = new DataView();
+            dataView.setMsg("用户分配角色成功");
+            dataView.setCode(200);
+            return dataView;
+        }catch (Exception e){
+            DataView dataView = new DataView();
+            dataView.setMsg("用户分配角色失败，请重新检查相关信息");
+            dataView.setCode(200);
+            return dataView;
+        }
     }
 
     /**
@@ -252,32 +291,42 @@ public class UserController {
 
     @RequestMapping(value="/uploadFile")
     @ResponseBody
-    public  DataView uploadFile(@RequestParam("imgPath") MultipartFile file,HttpSession session) {
+    public  DataView uploadFile(@RequestParam("imgPath") MultipartFile photo,HttpSession session) {
 
         String date = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
         // 图片存放位置
-        String imagePath = "E:\\JAVA\\NocvSystem\\src\\main\\resources\\static\\images\\UserFaces\\"+"time"+date+"name";
+        String imagePath = "E:/java/NocvSystem/src/main/resources/static/images/UserFaces/"+"time"+date+"name";
         DataView dataView = new DataView();
-        System.out.println(file.getSize());
-        if (file.getSize() > 1048576) {
+        System.out.println(photo.getSize());
+        if (photo.getSize() > 1048576) {
             dataView.setMsg("请上传小于1M的头像");
             dataView.setCode(100);
             return dataView;
         } else {
-            try (InputStream input = file.getInputStream()) {
-                Files.copy(input, new File(imagePath +file.getOriginalFilename()).toPath());
-                File newFile = new File(imagePath +file.getOriginalFilename());
-                newFile.setReadable(true, false);
-                newFile.setWritable(true, false);
+            try (InputStream input = photo.getInputStream()) {
+                File path = new File("E:/java/NocvSystem/src/main/resources/static/images/UserFaces/");
+                if (!path.exists()) {
+                    path.mkdir();
+                }
+                //获取源照片名
+                String originalFilename = photo.getOriginalFilename();
+                //获取照片后缀名
+                String suffixName = originalFilename.substring(originalFilename.lastIndexOf('.'));
+                //使用UUID
+                String fileName = UUID.randomUUID().toString() + suffixName;
+                //保存照片到磁盘
+                photo.transferTo(new File("E:/java/NocvSystem/src/main/resources/static/images/UserFaces/" + fileName));
+
                 // 数据库存放图片信息 path
-                String path = "/images/userFaces/"+"time"+date+"name"+file.getOriginalFilename();
+                String url = "images/UserFaces/"+fileName;
                 User user = (User) session.getAttribute("user");
-                user.setImg(path);
+                user.setImg(url);
                 userService.updateById(user);
                 dataView.setMsg("上传成功!");
                 dataView.setCode(200);
                 return dataView;
             } catch (Exception e) {
+                e.printStackTrace();
                 dataView.setMsg("重复上传头像!");
                 dataView.setCode(100);
                 return dataView;

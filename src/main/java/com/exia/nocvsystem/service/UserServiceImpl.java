@@ -27,6 +27,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
         }
     }
+    public String findTeacher(String teacherId){
+        return userMapper.queryUidByTeacherId(teacherId).get(0);
+    }
 
 
 }

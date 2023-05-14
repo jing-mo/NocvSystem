@@ -3,6 +3,7 @@ package com.exia.nocvsystem.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.exia.nocvsystem.dao.UserMapper;
 import com.exia.nocvsystem.entity.ApprovalProcess;
 import com.exia.nocvsystem.entity.HeSuan;
 import com.exia.nocvsystem.entity.Role;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +37,8 @@ public class ApprovalController extends BaseController {
     ApprovalService approvalService;
     @Autowired
     RoleService roleService;
-
+    @Resource
+    private UserMapper userMapper;
     @RequestMapping("/toApproval")
     public String toApproval(){
         return "approval/approval";
@@ -45,16 +48,16 @@ public class ApprovalController extends BaseController {
     public DataView loadAllApproval(ApprovalVo approvalVo, HttpSession httpSession){
         User user=(User) httpSession.getAttribute("user");
         if(StringUtils.isNotEmpty(user.getUsername())) {
-            String username = user.getUsername();
             Integer uid=user.getId();
             IPage<ApprovalProcess> page = new Page<>(approvalVo.getPage(), approvalVo.getLimit());
             QueryWrapper<ApprovalProcess> queryWrapper = new QueryWrapper();
-            queryWrapper.ge(StringUtils.isNotBlank(String.valueOf(uid)), "uid", uid);
             addUids(queryWrapper);
             approvalService.page(page, queryWrapper);
             //处理用户名
             List<ApprovalProcess> records=page.getRecords();
             for(ApprovalProcess a:records){
+                List<String> usernames= userMapper.queryUidName(a.getUid());
+                String username=usernames.get(0);
                 a.setUsername(username);
             }
             return new DataView(page.getTotal(), page.getRecords());
@@ -96,7 +99,6 @@ public class ApprovalController extends BaseController {
         User user=(User)session.getAttribute("user");
         Integer id= user.getId();
         String username=user.getUsername();
-        approvalProcess.setUid(id);
         //2.根据老师和院系进行节点状态改变
         List<Integer> roleList = roleService.queryUserRoleById(id);
         Integer integer = roleList.get(0);
@@ -143,7 +145,6 @@ public class ApprovalController extends BaseController {
         User user=(User)session.getAttribute("user");
         Integer id= user.getId();
         String username=user.getUsername();
-        approvalProcess.setUid(id);
         //2.根据老师和院系进行节点状态改变
         List<Integer> roleList = roleService.queryUserRoleById(id);
         Integer integer = roleList.get(0);

@@ -41,4 +41,6 @@ public interface RoleMapper extends BaseMapper<Role> {
 
     @Select("select a.data_authority from role a,user_role b where a.id = b.rid and b.uid=#{uid}")
     Integer queryDataAuthority(Integer uid);
+
+
 }

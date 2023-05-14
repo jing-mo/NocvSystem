@@ -1,12 +1,8 @@
 package com.exia.nocvsystem.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.exia.nocvsystem.dao.RoleMapper;
 import com.exia.nocvsystem.entity.Role;
-import com.fasterxml.jackson.databind.cfg.ContextAttributes;
-import com.sun.istack.internal.Pool;
-import org.apache.ibatis.ognl.DynamicSubscript;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

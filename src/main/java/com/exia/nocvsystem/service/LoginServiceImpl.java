@@ -13,9 +13,14 @@ import org.springframework.stereotype.Service;
 public class LoginServiceImpl extends ServiceImpl<LoginMapper, User> implements LoginService {
     @Autowired
     private LoginMapper loginMapper;
+//    @Override
+//    public User login(String username,String password){
+//        return loginMapper.login(username, password);
+//    }
+
     @Override
-    public User login(String username,String password){
-        return loginMapper.login(username, password);
+    public String FindSalt(String cardId) {
+        return loginMapper.FindSalt(cardId);
     }
 
 

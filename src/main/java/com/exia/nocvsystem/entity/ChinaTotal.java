@@ -20,6 +20,8 @@ public class ChinaTotal {
     private Integer severe;
     private Integer heal;
     private Integer dead;
-    private Integer suspect;
     private Date updateTime;
+
+    public void setSuspect(int i) {
+    }
 }

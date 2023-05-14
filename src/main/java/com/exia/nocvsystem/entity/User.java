@@ -24,7 +24,7 @@ public class User {
     //作为外键使用
     private Integer classId;
     private Integer institudeId;
-    private Integer teacherId;
+    private String teacherId;
 
     //非数据库列 班级名
     @TableField(exist=false)
@@ -43,4 +43,5 @@ public class User {
     public String getPassword() {
         return password;
     }
+
 }

@@ -16,22 +16,22 @@
           <div class="layui-bg-gray" style="padding: 30px;">
             <div class="layui-row layui-col-space15">
               <div class="layui-col-md8">
-                <div class="layui-panel">
+                <div class="layui-panel" >
                     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
                       <legend>新冠肺炎实时疫情数据展示-----<span th:text="'统计截至时间:'+${#dates.format(chinaTotal.updateTime,'yyyy-MM-dd HH:mm')}"></span></legend>
                     </fieldset>
-                    <div class="layui-btn-container"  style="padding: 10px;">
+                    <div class="layui-btn-container"  style="padding-left: 20%;">
                       <button type="button" class="layui-btn layui-btn-danger layui-btn-lg" th:text="'确诊总人数:'+${chinaTotal.confirm}"></button>
                       <button type="button" class="layui-btn layui-btn-warm layui-btn-lg" th:text="'输入病例:'+${chinaTotal.input}"></button>
                       <button type="button" class="layui-btn layui-btn-lg" th:text="'治愈人数:'+${chinaTotal.heal}"></button>
                       <button type="button" class="layui-btn layui-bg-black layui-btn-lg" th:text="'死亡总人数:'+${chinaTotal.dead}"></button>
                     </div>
-                    <div id="main" style="width:500px;height:500px;"></div>
+                    <div id="main" style="width:500px;height:500px;padding-left: 30%;"></div>
                   </div>
                 </div>
               <div class="layui-col-md4">
                 <div class="layui-panel">
-                  <div class="layui-carousel" id="test1" lay-filter="test1">
+                  <div class="layui-carousel" id="test1" lay-filter="test1" style="width: ">
                     <div carousel-item="">
                       <div><img style="height: 100%;width:100%" th:src="@{/images/banner3.jpg}"></div>
                       <div><img style="height: 100%;width:100%" th:src="@{/images/banner2.jpg}"></div>
