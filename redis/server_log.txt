@@ -673,3 +673,11 @@
 [4756] 14 May 01:01:27.050 * Background saving started by pid 14756
 [4756] 14 May 01:01:27.491 # fork operation complete
 [4756] 14 May 01:01:27.493 * Background saving terminated with success
+[5276] 15 May 11:50:26.203 * Redis 3.2.100 (00000000/0) 64 bit, standalone mode, port 6379, pid 5276 ready to start.
+[5276] 15 May 11:50:26.279 # Server started, Redis version 3.2.100
+[5276] 15 May 11:50:26.397 * DB loaded from disk: 0.115 seconds
+[5276] 15 May 11:50:26.398 * The server is now ready to accept connections on port 6379
+[5244] 15 May 14:58:41.614 * Redis 3.2.100 (00000000/0) 64 bit, standalone mode, port 6379, pid 5244 ready to start.
+[5244] 15 May 14:58:41.640 # Server started, Redis version 3.2.100
+[5244] 15 May 14:58:41.709 * DB loaded from disk: 0.070 seconds
+[5244] 15 May 14:58:41.709 * The server is now ready to accept connections on port 6379

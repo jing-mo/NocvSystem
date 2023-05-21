@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.exia.nocvsystem.entity.HealthClock;
 import com.exia.nocvsystem.service.HealthClockService;
+import com.exia.nocvsystem.service.UserService;
 import com.exia.nocvsystem.vo.DataView;
 import com.exia.nocvsystem.vo.HealthClockVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HealthClockController extends BaseController{
     @Autowired
     private HealthClockService healthClockService;
+    @Autowired
+    UserService userService;
     //跳转页面
     @RequestMapping("/toHealthClock")
     public String toHealthClock(){
@@ -42,25 +45,43 @@ public class HealthClockController extends BaseController{
     @RequestMapping("/addHealthClock")
     @ResponseBody
     public DataView addHealthClock(HealthClock healthClock){
-        boolean save=healthClockService.saveOrUpdate(healthClock);
-        DataView dataView=new DataView();
-        if(save){
-            dataView.setCode(200);
-            dataView.setMsg("新增健康打卡数据成功！");
+        DataView dataView = new DataView();
+        try {
+            if(userService.isExistsUser(healthClock.getCard())){
+            boolean save = healthClockService.saveOrUpdate(healthClock);
+                if (save) {
+                    dataView.setCode(200);
+                    dataView.setMsg("新增健康打卡数据成功！");
+                    return dataView;
+                }
+                dataView.setCode(100);
+                dataView.setMsg("新增健康打卡数据失败！");
+                return dataView;
+            }else{
+                dataView.setCode(100);
+                dataView.setMsg("新增健康打卡数据失败！");
+                return dataView;
+            }
+        }catch (Exception e){
+            dataView.setCode(100);
+            dataView.setMsg("新增健康打卡数据失败！");
             return dataView;
         }
-        dataView.setCode(100);
-        dataView.setMsg("新增健康打卡数据失败！");
-        return dataView;
     }
     @RequestMapping("/deleteHealthClockById")
     @ResponseBody
     public DataView deleteHealthClockById(Integer id){
-        healthClockService.removeById(id);
         DataView dataView=new DataView();
-        dataView.setCode(200);
-        dataView.setMsg("删除健康打卡数据成功！");
-        return dataView;
+        try{
+            healthClockService.removeById(id);
+            dataView.setCode(200);
+            dataView.setMsg("删除健康打卡数据成功！");
+            return dataView;
+        }catch (Exception e){
+            dataView.setCode(100);
+            dataView.setMsg("删除健康打卡数据失败！");
+            return dataView;
+        }
     }
 
 }

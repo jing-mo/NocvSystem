@@ -165,7 +165,7 @@
       </div>
       <div class="layui-form-item">
         <div class="layui-inline">
-          <label class="layui-form-label">老师教工号</label>
+          <label class="layui-form-label">上级信息审批人教工号</label>
           <div class="layui-input-block">
             <input type="text" name="teacherId" id="teacherId" class="layui-input input-radius" placeholder="如是老师角色的用户输入自己的教工号">
           </div>
@@ -181,6 +181,7 @@
           </button>
         </div>
       </div>
+    </div>
     </div>
   </form>
 
@@ -237,7 +238,7 @@
         {field: 'cardId', title: '学生/教工卡号', align: 'center', width: '100'},
         {field: 'className', title: '班级', align: 'center', width: '100'},
         {field: 'institudeName', title: '学院', align: 'center', width: '100'},
-        {field: 'teacherName', title: '老师', align: 'center', width: '100'},
+        {field: 'teacherName', title: '上级', align: 'center', width: '100'},
         {fixed: 'right', title: '操作', toolbar: '#userRowBar', align: 'center', width: '330'}
       ] ],
       done: function (data, curr, count) {
@@ -411,13 +412,7 @@
     }
 
 
-    //监听用户名失去焦点事件
-    $("#username").on("blur",function () {
-      var username = $(this).val();
-      $.get("/user/changeChineseToPinyin",{username:username},function (res) {
-        $("#loginname").val(res.value);
-      })
-    });
+
 
 
     //打开分配角色的弹出层

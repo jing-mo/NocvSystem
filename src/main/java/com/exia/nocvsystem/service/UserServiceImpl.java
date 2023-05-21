@@ -31,5 +31,36 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userMapper.queryUidByTeacherId(teacherId).get(0);
     }
 
+    @Override
+    public boolean isTrueInstitude(Integer classId,Integer institudeId) {
+        if(userMapper.FindInstitude(classId).get(0).equals(institudeId))
+            return true;
+        return false;
+    }
+
+    @Override
+    public boolean isExistsCardId(String cardId) {
+        if(userMapper.FineCardId(cardId).get(0)!=null)
+            return true;
+        return false;
+    }
+
+    @Override
+    public boolean isExistsUser(String cardId) {
+        if(!userMapper.FindUser(cardId).get(0).equals(null))
+            return true;
+        return false;
+    }
+
+    @Override
+    public boolean isExistsDean(Integer uid) {
+        Integer institudeId=userMapper.userInstitude(uid).get(0);
+        Integer deanNum=userMapper.countOfDean(institudeId);
+        Integer deanId=userMapper.idOfDean(institudeId).get(0);
+        if(deanNum>=1 && deanId!=uid)
+            return true;
+        return false;
+    }
+
 
 }

@@ -56,7 +56,6 @@ public class LoginController {
             dataView.setMsg("用户名或密码为空！");
             return dataView;
         }
-
         //            1.判断验证码是否正确
         String sessionCode = (String) session.getAttribute("code");
         String salt=loginService.FindSalt(cardId);

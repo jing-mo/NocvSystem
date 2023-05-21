@@ -117,24 +117,41 @@ public class UserController extends BaseController{
     @RequestMapping("/addUser")
     @ResponseBody
     public DataView addUser(User user) {
-        String password=user.getPassword();
-        String salt= PasswordHelper.createSalt();
-        user.setSalt(salt);
-        user.setImg("/images/default.jpg");
-        String newPassword=PasswordHelper.createCredentials(password,salt);
-        if(PasswordHelper.checkCredentials(password,salt,newPassword)){
-            user.setPassword(newPassword);
-        }else{
-            DataView dataView = new DataView();
-            dataView.setMsg("用户添加失败");
-            dataView.setCode(300);
-            return dataView;
-        }
-        userService.save(user);
         DataView dataView = new DataView();
-        dataView.setMsg("用户添加成功!");
-        dataView.setCode(200);
-        return dataView;
+
+            if(!userService.isExistsUser(user.getCardId())){
+                String password=user.getPassword();
+                String salt= PasswordHelper.createSalt();
+                user.setSalt(salt);
+                user.setImg("/images/default.jpg");
+                String newPassword=PasswordHelper.createCredentials(password,salt);
+                if(PasswordHelper.checkCredentials(password,salt,newPassword)){
+                    user.setPassword(newPassword);
+                }else{
+                    dataView.setMsg("用户添加失败");
+                    dataView.setCode(100);
+                    return dataView;
+                }
+                if(userService.isExistsCardId(user.getCardId())&&!userService.isExistsCardId(user.getTeacherId())){
+                    dataView.setMsg("用户添加失败");
+                    dataView.setCode(100);
+                    return dataView;
+                }
+                if(!userService.isTrueInstitude(user.getClassId(),user.getInstitudeId())){
+                    dataView.setMsg("班级与院级不匹配");
+                    dataView.setCode(100);
+                    return dataView;
+                }
+                userService.save(user);
+                dataView.setMsg("用户添加成功!");
+                dataView.setCode(200);
+                return dataView;
+            }else {
+                dataView.setMsg("用户添加失败!");
+                dataView.setCode(100);
+                return dataView;
+            }
+
     }
 
     /**
@@ -160,28 +177,31 @@ public class UserController extends BaseController{
     @RequestMapping("/updateUser")
     @ResponseBody
     public DataView updateUser(User user) {
-        try{
-            String password=user.getPassword();
-            String salt= PasswordHelper.createSalt();
+        DataView dataView = new DataView();
+        try {
+            String password = user.getPassword();
+            String salt = PasswordHelper.createSalt();
             user.setSalt(salt);
-            String newPassword=PasswordHelper.createCredentials(password,salt);
-            if(PasswordHelper.checkCredentials(password,salt,newPassword)){
+            String newPassword = PasswordHelper.createCredentials(password, salt);
+            if (PasswordHelper.checkCredentials(password, salt, newPassword)) {
                 user.setPassword(newPassword);
-            }else{
-                DataView dataView = new DataView();
+            } else {
                 dataView.setMsg("用户修改失败");
                 dataView.setCode(100);
                 return dataView;
             }
+            if (!userService.isTrueInstitude(user.getClassId(), user.getInstitudeId())) {
+                dataView.setMsg("班级与院级不匹配");
+                dataView.setCode(100);
+                return dataView;
+            }
             userService.updateById(user);
-            DataView dataView = new DataView();
             dataView.setMsg("用户修改成功");
             dataView.setCode(200);
             return dataView;
-        } catch (Exception e){
-            DataView dataView = new DataView();
+        }catch (IndexOutOfBoundsException e){
             dataView.setMsg("用户修改失败");
-            dataView.setCode(100);
+            dataView.setCode(200);
             return dataView;
         }
     }
@@ -235,15 +255,15 @@ public class UserController extends BaseController{
         List<Integer> currentUserRoleIds = roleService.queryUserRoleById(id);
         //前端变为选中状态
         for (Map<String, Object> map : listMaps) {
-            Boolean LAY_CHERCKED = false;
+            Boolean LAY_CHECKED = false;
             Integer roleId = (Integer) map.get("id");
             for (Integer rid : currentUserRoleIds) {
                 if (rid.equals(roleId)) {
-                    LAY_CHERCKED = true;
+                    LAY_CHECKED = true;
                     break;
                 }
             }
-            map.put("LAY_CHERCKED", LAY_CHERCKED);
+            map.put("LAY_CHECKED", LAY_CHECKED);
 
         }
         return new DataView(Long.valueOf(listMaps.size()), listMaps);
@@ -252,16 +272,20 @@ public class UserController extends BaseController{
     @RequestMapping("/saveUserRole")
     @ResponseBody
     public DataView saveUserRole(Integer uid, Integer[] ids) {
+        DataView dataView = new DataView();
         try {
+            if(userService.isExistsDean(uid)) {
+                dataView.setMsg("该院系已经有一名院长！");
+                dataView.setCode(100);
+                return dataView;
+            }
             userService.saveUserRole(uid, ids);
-            DataView dataView = new DataView();
             dataView.setMsg("用户分配角色成功");
             dataView.setCode(200);
             return dataView;
         }catch (Exception e){
-            DataView dataView = new DataView();
             dataView.setMsg("用户分配角色失败，请重新检查相关信息");
-            dataView.setCode(200);
+            dataView.setCode(100);
             return dataView;
         }
     }
@@ -285,7 +309,7 @@ public class UserController extends BaseController{
         }
         DataView dataView = new DataView();
         dataView.setMsg("用户重置密码失败，可能旧密码输入错误或两次密码输入不一致");
-        dataView.setCode(500);
+        dataView.setCode(100);
         return dataView;
     }
 

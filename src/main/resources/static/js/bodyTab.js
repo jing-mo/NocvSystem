@@ -382,7 +382,7 @@ layui.define(["element","jquery"],function(exports){
                 }
             })
         }else{
-            layer.msg("没有可以关闭的窗口了");
+            layer.msg("没有可以关闭的窗口了@_@");
         }
         //渲染顶部窗口
         tab.tabMove();

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.exia.nocvsystem.entity.HeSuan;
 import com.exia.nocvsystem.entity.Vaccine;
+import com.exia.nocvsystem.service.UserService;
 import com.exia.nocvsystem.service.VaccineService;
 import com.exia.nocvsystem.vo.DataView;
 import com.exia.nocvsystem.vo.HeSuanVo;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class VaccineController extends BaseController{
     @Autowired
     VaccineService vaccineService;
+    @Autowired
+    UserService userService;
     @RequestMapping("/toVaccine")
     public String toVaccine(){
         return "vaccine/vaccine";
@@ -44,11 +47,23 @@ public class VaccineController extends BaseController{
     @RequestMapping("/addVaccine")
     @ResponseBody
     public DataView addVaccine(Vaccine vaccine){
-        vaccineService.save(vaccine);
-        DataView dataView=new DataView();
-        dataView.setCode(200);
-        dataView.setMsg("疫苗信息添加成功");
-        return dataView;
+        DataView dataView = new DataView();
+        try {
+            if (userService.isExistsUser(vaccine.getCard())) {
+                vaccineService.save(vaccine);
+                dataView.setCode(200);
+                dataView.setMsg("疫苗信息添加成功");
+                return dataView;
+            } else {
+                dataView.setCode(100);
+                dataView.setMsg("疫苗信息添加失败");
+                return dataView;
+            }
+        }catch (Exception e){
+            dataView.setCode(100);
+            dataView.setMsg("疫苗信息添加失败");
+            return dataView;
+        }
     }
     @RequestMapping("/deleteVaccine")
     @ResponseBody
@@ -62,10 +77,16 @@ public class VaccineController extends BaseController{
     @RequestMapping("/updateVaccine")
     @ResponseBody
     public DataView updateVaccine(Vaccine vaccine){
-        vaccineService.updateById(vaccine);
         DataView dataView=new DataView();
-        dataView.setCode(200);
-        dataView.setMsg("核酸信息修改成功");
-        return dataView;
+        try {
+            vaccineService.updateById(vaccine);
+            dataView.setCode(200);
+            dataView.setMsg("核酸信息修改成功");
+            return dataView;
+        }catch (Exception e){
+            dataView.setCode(100);
+            dataView.setMsg("核酸信息修改失败");
+            return dataView;
+        }
     }
 }

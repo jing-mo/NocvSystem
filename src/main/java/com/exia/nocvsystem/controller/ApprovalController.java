@@ -11,6 +11,7 @@ import com.exia.nocvsystem.entity.User;
 import com.exia.nocvsystem.enums.ApprovalNodeStatusEnum;
 import com.exia.nocvsystem.service.ApprovalService;
 import com.exia.nocvsystem.service.RoleService;
+import com.exia.nocvsystem.service.UserService;
 import com.exia.nocvsystem.vo.ApprovalVo;
 import com.exia.nocvsystem.vo.DataView;
 import com.exia.nocvsystem.vo.HeSuanVo;
@@ -37,6 +38,8 @@ public class ApprovalController extends BaseController {
     ApprovalService approvalService;
     @Autowired
     RoleService roleService;
+    @Autowired
+    UserService userService;
     @Resource
     private UserMapper userMapper;
     @RequestMapping("/toApproval")
@@ -67,28 +70,43 @@ public class ApprovalController extends BaseController {
     @RequestMapping("/addApproval")
     @ResponseBody
     public DataView addApproval(ApprovalProcess approvalProcess,HttpSession httpSession){
-        approvalProcess.setCreateTime(new Date());
-        User user=(User)httpSession.getAttribute("user");
-        Integer id= user.getId();
-        approvalProcess.setUid(id);
-        List<Integer> roleList = roleService.queryUserRoleById(id);
-        Integer integer = roleList.get(0);
-        Role byId = roleService.getById(integer);
-        String name = byId.getName();
-        if(StringUtils.equals(name,"admin")||StringUtils.equals(name,"student")){
-            approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_TEACHER_ING.getCode());
-        }else if(StringUtils.equals(name,"teacher")){
-            approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_COLLEGE_ING.getCode());
-        }else if(StringUtils.equals(name,"dean")){
-            approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_COLLEGE_PASSED.getCode());
-        }else{
-            approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_TEACHER_ING.getCode());
-        }
-        approvalService.save(approvalProcess);
         DataView dataView=new DataView();
-        dataView.setCode(200);
-        dataView.setMsg("申请请假成功");
-        return dataView;
+        try{
+            if((userService.getById(approvalProcess.getUid()).equals(null))){
+                approvalProcess.setCreateTime(new Date());
+                User user = (User) httpSession.getAttribute("user");
+                Integer id = user.getId();
+                approvalProcess.setUid(id);
+                List<Integer> roleList = roleService.queryUserRoleById(id);
+                Integer integer = roleList.get(0);
+                Role byId = roleService.getById(integer);
+                String name = byId.getName();
+                if (StringUtils.equals(name, "student")) {
+                    approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_TEACHER_ING.getCode());
+                } else if (StringUtils.equals(name, "teacher")) {
+                    approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_COLLEGE_ING.getCode());
+                } else if (StringUtils.equals(name, "dean")) {
+                    approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_COLLEGE_PASSED.getCode());
+                } else if (StringUtils.equals(name, "admin")) {
+                    approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_COLLEGE_PASSED.getCode());
+                } else {
+                    approvalProcess.setNodeStatus(ApprovalNodeStatusEnum.APPROVAL_TEACHER_ING.getCode());
+                }
+                approvalService.save(approvalProcess);
+                dataView.setCode(200);
+                dataView.setMsg("申请请假成功");
+                return dataView;
+            }else{
+                dataView.setCode(100);
+                dataView.setMsg("申请请假失败");
+                return dataView;
+            }
+        }
+        catch (Exception e){
+                dataView.setCode(100);
+                dataView.setMsg("申请请假失败");
+                return dataView;
+        }
     }
     @RequestMapping("/rejectApproval")
     @ResponseBody

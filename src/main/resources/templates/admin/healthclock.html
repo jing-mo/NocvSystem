@@ -17,7 +17,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">姓名</label>
             <div class="layui-input-inline">
-                <input type="text" name="username" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+                <input type="text" name="username" required  lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -30,50 +30,54 @@
         <div class="layui-form-item">
             <label class="layui-form-label">年龄</label>
             <div class="layui-input-inline">
-                <input type="text" name="age" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+                <input type="text" name="age" required  lay-verify="required|number" placeholder="请输入年龄" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">学生/教工卡号</label>
             <div class="layui-input-inline">
-                <input type="text" name="card" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+                <input type="text" name="card" required  lay-verify="required" placeholder="请输入学生/教工卡号" autocomplete="off" class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">手机号</label>
             <div class="layui-input-inline">
-                <input type="text" name="phone" required  lay-verify="required phone" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+                <input type="text" name="phone" required  lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">早上体温</label>
             <div class="layui-input-inline">
-                <input type="text" name="morningTemp" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+                <input type="text" name="morningTemp" required  lay-verify="required|number" placeholder="请输入早上体温" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">中午体温</label>
             <div class="layui-input-inline">
-                <input type="text" name="afternoonTemp" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+                <input type="text" name="afternoonTemp" required  lay-verify="required|number" placeholder="请输入中午体温" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">晚上体温</label>
             <div class="layui-input-inline">
-                <input type="text" name="nightTemp" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+                <input type="text" name="nightTemp" required  lay-verify="required|number" placeholder="请输入晚上体温" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">发烧咳嗽</label>
             <div class="layui-input-inline">
-                <input type="text" name="feverAndCough" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+                <select  name="feverAndCough" >
+                    <option value="无此类症状">无此类症状</option>
+                    <option value="发烧" selected="">发烧</option>
+                    <option value="咳嗽">咳嗽</option>
+                </select>
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">近期居住地</label>
             <div class="layui-input-inline">
-                <input type="text" name="recentHome" required  lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+                <input type="text" name="recentHome" required  lay-verify="required" placeholder="请输入近期居住地" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -88,14 +92,15 @@
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">近期接触史</label>
             <div class="layui-input-inline">
-                <textarea name="recentZone" placeholder="请输入内容" class="layui-textarea"></textarea>
+                <input type="radio" name="recentZone" value="有" title="有">
+                <input type="radio" name="recentZone" value="无" title="无" checked>
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">健康状况</label>
             <div class="layui-input-inline">
                 <input type="radio" name="healthStatus" value="健康" title="健康" checked>
-                <input type="radio" name="healthStatus" value="有发烧、咳嗽、腹泻等相关症状" title="有发烧、咳嗽、腹泻等相关症状">
+                <input type="radio" name="healthStatus" value="有新冠典型症状" title="有新冠典型症状">
                 <input type="radio" name="healthStatus" value="其他症状" title="其他症状">
             </div>
         </div>
@@ -142,6 +147,9 @@
         <table class="layui-hide" id="demo" lay-filter="test"></table>
     </div>
     <script type="text/html" id="barDemo">
+        <button type="button" lay-event="update"  class="layui-btn layui-btn-sm layui-btn-radius"><i
+                class="layui-icon layui-icon-edit"></i>编辑
+        </button>
         <button type="button" lay-event="delete"  class="layui-btn layui-btn-sm layui-btn-danger layui-btn-radius"><i
                 class="layui-icon layui-icon-delete"></i>删除
         </button>
@@ -215,7 +223,7 @@
                             if (data.healthStatus == '其他症状'){
                                 return '<span class=\"layui-badge layui-bg-orange\">其他症状</span>'
                             }else if(data.healthStatus == '有发烧、咳嗽、腹泻等相关症状'){
-                                return '<span class=\"layui-badge layui-bg-red\">有发烧、咳嗽、腹泻等相关症状</span>'
+                                return '<span class=\"layui-badge layui-bg-red\">有新冠典型症状</span>'
                             }else if (data.healthStatus == '健康')
                                 return '<span class=\"layui-badge layui-bg-green\">健康</span>'
                         }

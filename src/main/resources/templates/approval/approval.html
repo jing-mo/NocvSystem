@@ -17,11 +17,11 @@
         <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">姓名</label>
+                    <label class="layui-form-label">请假/审批人姓名</label>
                     <div class="layui-input-block">
                         <input type="hidden" name="id">
                         <input type="text" name="name" lay-verify="required" autocomplete="off"
-                               class="layui-input input-radius" placeholder="请输入姓名">
+                               class="layui-input input-radius layui-disabled" th:value="${session.user.username}" disabled>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -58,22 +58,7 @@
                     </div>
                 </div>
             </div>
-            <!--                <div class="layui-form">-->
-            <!--                    <div class="layui-form-item">-->
-            <!--                        <div class="layui-inline">-->
-            <!--                            <label class="layui-form-label">请假时间</label>-->
-            <!--                            <div class="layui-input-inline">-->
-            <!--                                <input type="text" name="createTime" class="layui-input" lay-verify="required" id="test1" placeholder="yyyy-MM-dd HH:mm:ss">-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                        <div class="layui-inline">-->
-            <!--                            <label class="layui-form-label">报告时间</label>-->
-            <!--                            <div class="layui-input-inline">-->
-            <!--                                <input type="text" name="updateTime" class="layui-input" id="test2" placeholder="yyyy-MM-dd HH:mm:ss">-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                    </div>-->
-            <!--                </div>-->
+
             <div class="layui-form-item">
                 <div class="layui-input-block" style="text-align: center;padding-right: 7%">
                     <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
@@ -143,7 +128,6 @@
             var form = layui.form;
             var layer = layui.layer;
             var table = layui.table;
-            var dtree = layui.dtree;
             var laydate=layui.laydate;
             laydate.render({
                 elem: '#test1',
@@ -249,7 +233,7 @@
                     type:1,
                     content:$("#addOrUpdateDiv"),
                     area:['800px','450px'],
-                    title:'添加菜单',
+                    title:'请假审批',
                     success:function () {
                         $("#dataFrm")[0].reset();
                         //设置下拉树中父节点的值为空

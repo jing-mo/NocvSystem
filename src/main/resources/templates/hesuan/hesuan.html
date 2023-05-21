@@ -35,7 +35,7 @@
         <div class="layui-inline">
           <label class="layui-form-label">手机号码</label>
           <div class="layui-input-block">
-            <input type="text" name="phone" lay-verify="required phone" autocomplete="off" class="layui-input input-radius" placeholder="请输入手机号码">
+            <input type="text" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input input-radius" placeholder="请输入手机号码">
           </div>
         </div>
         <div class="layui-inline">
@@ -50,13 +50,18 @@
           <div class="layui-inline">
             <label class="layui-form-label">检测类型</label>
             <div class="layui-input-block">
-              <input type="text" name="type" autocomplete="off" class="layui-input input-radius" placeholder="请选择填写混检、咽拭子、鼻拭子或单检">
+              <select  name="type" >
+                <option value="无此类症状" selected="">无此类症状</option>
+                <option value="发烧" >发烧</option>
+                <option value="咳嗽">咳嗽</option>
+              </select>
             </div>
           </div>
           <div class="layui-inline">
             <label class="layui-form-label">核酸结果</label>
             <div class="layui-input-block">
-              <input type="text" name="result" autocomplete="off" class="layui-input input-radius" placeholder="请输入阳性或者阳性">
+              <input type="radio" name="result" value="阴性" title="阴性" checked>
+              <input type="radio" name="result" value="阳性" title="阳性">
             </div>
           </div>
         </div>

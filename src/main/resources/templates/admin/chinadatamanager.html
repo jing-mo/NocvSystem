@@ -12,7 +12,7 @@
     </style>
 </head>
 <body class="childrenBody">
-<--模态窗-->
+<!--模态窗-->
 <div id="AddOrUpdateDiv" style="display: none;padding: 10px;padding-right:5%">
     <form action="" method="post" id="searchFrm2" lay-filter="searchFrm2" class="layui-form">
         <div class="layui-inline">
@@ -30,7 +30,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">确诊数量</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="value" id="chinavalue" lay-verify="required" class="layui-input input-radius" placeholder="请输入确诊数量">
+                    <input type="text" name="value" id="chinavalue" lay-verify="required number" class="layui-input input-radius" placeholder="请输入确诊数量">
                 </div>
             </div>
             <div class="layui-inline" style="padding-left: 10%">
@@ -89,7 +89,7 @@
     </div>
     <!--table-->
     <div style="padding: 15px;">
-        <table class="layui-hide" id="demo" lay-filter="test">地图名称</table>
+        <table class="layui-hide" id="demo" lay-filter="test">疫情数据</table>
     </div>
 
 </div>

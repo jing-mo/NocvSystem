@@ -31,7 +31,7 @@ public class HttpUtils {
             request = new HttpGet("https://interface.sina.cn/news/wap/fymap2020_data.d.json");
             //3.配置信息
             request.setConfig(requestConfig);
-            //4.发送请求
+            //4.接受响应
             response = httpClient.execute(request);
             //5.状态码
             int statusCode=response.getStatusLine().getStatusCode();

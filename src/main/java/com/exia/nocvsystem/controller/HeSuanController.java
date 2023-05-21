@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.exia.nocvsystem.entity.HeSuan;
 import com.exia.nocvsystem.service.HeSuanService;
+import com.exia.nocvsystem.service.UserService;
 import com.exia.nocvsystem.vo.DataView;
 import com.exia.nocvsystem.vo.HeSuanVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HeSuanController extends BaseController{
     @Autowired
     HeSuanService heSuanService;
+    @Autowired
+    UserService userService;
     @RequestMapping("/toHeSuan")
     public String toHeSuan(){
         return "hesuan/hesuan";
@@ -41,12 +44,27 @@ public class HeSuanController extends BaseController{
     @RequestMapping("/addHeSuan")
     @ResponseBody
     public DataView addHeSuan(HeSuan heSuan){
-        heSuanService.save(heSuan);
         DataView dataView=new DataView();
-        dataView.setCode(200);
-        dataView.setMsg("核酸信息添加成功");
-        return dataView;
+        try{
+            if(userService.isExistsUser(heSuan.getCard())){
+                heSuanService.save(heSuan);
+                dataView.setCode(200);
+                dataView.setMsg("核酸信息添加成功");
+                return dataView;
+            }
+            else {
+                dataView.setCode(100);
+                dataView.setMsg("核酸信息添加失败");
+                return dataView;
+            }
+        }catch (Exception e){
+            dataView.setCode(100);
+            dataView.setMsg("核酸信息添加失败");
+            return dataView;
+        }
     }
+
+
 
     @RequestMapping("/deleteHeSuan")
     @ResponseBody
@@ -61,11 +79,17 @@ public class HeSuanController extends BaseController{
     @RequestMapping("/updateHeSuan")
     @ResponseBody
     public DataView updateHeSuan(HeSuan heSuan){
-        heSuanService.updateById(heSuan);
         DataView dataView=new DataView();
-        dataView.setCode(200);
-        dataView.setMsg("核酸信息修改成功");
-        return dataView;
+        try{
+            heSuanService.updateById(heSuan);
+            dataView.setCode(200);
+            dataView.setMsg("核酸信息修改成功");
+            return dataView;
+        }catch (Exception e){
+            dataView.setCode(100);
+            dataView.setMsg("核酸信息修改失败");
+            return dataView;
+        }
     }
 
 }
