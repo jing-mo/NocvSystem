@@ -889,3 +889,7 @@
 [5168] 23 May 00:40:27.028 * Background saving started by pid 39828
 [5168] 23 May 00:40:27.679 # fork operation complete
 [5168] 23 May 00:40:27.680 * Background saving terminated with success
+[5168] 23 May 00:45:28.050 * 10 changes in 300 seconds. Saving...
+[5168] 23 May 00:45:28.064 * Background saving started by pid 22748
+[5168] 23 May 00:45:28.392 # fork operation complete
+[5168] 23 May 00:45:28.393 * Background saving terminated with success
