@@ -61,6 +61,7 @@ public class RoleController implements Serializable {
     @RequestMapping("/addRole")
     @ResponseBody
     public DataView addRole(Role role){
+        roleService.autoIncrement();
         roleService.save(role);
         DataView dataView=new DataView();
         dataView.setMsg("添加角色成功！");
@@ -76,6 +77,7 @@ public class RoleController implements Serializable {
     @RequestMapping("/deleteRole")
     @ResponseBody
     public DataView deleteRole(Role role){
+        roleService.autoIncrement();
         roleService.removeById(role.getId());
         DataView dataView=new DataView();
         dataView.setMsg("删除角色成功！");

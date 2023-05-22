@@ -5,6 +5,7 @@ import com.exia.nocvsystem.entity.LineTrend;
 import com.exia.nocvsystem.entity.NocvData;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface IndexMapper extends BaseMapper<NocvData> {
     List<LineTrend> findSevenData();
     @Select("select * from nocv_data order by id desc limit 34")
     List<NocvData> listOrOrderByLimit34();
+    @Update("ALTER TABLE nocv_data AUTO_INCREMENT = 0;")
+    void autoIncrement();
 }

@@ -12,5 +12,6 @@ public interface LoginMapper extends BaseMapper<User> {
 //    public User login(String username,String password);
 
     @Select("select salt from user where card_id= #{cardId}")
-    public String FindSalt(String cardId);
+    String FindSalt(String cardId);
+
 }

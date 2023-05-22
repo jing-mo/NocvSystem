@@ -3,6 +3,7 @@ package com.exia.nocvsystem.service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.exia.nocvsystem.dao.VaccineMapper;
 import com.exia.nocvsystem.entity.Vaccine;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,4 +13,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class VaccineServiceImpl extends ServiceImpl<VaccineMapper, Vaccine> implements VaccineService{
+    @Autowired
+    VaccineMapper vaccineMapper;
+    @Override
+    public void autoIncrement() {
+        vaccineMapper.autoIncrement();
+    }
 }

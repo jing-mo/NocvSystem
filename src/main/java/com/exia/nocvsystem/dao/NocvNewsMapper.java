@@ -5,6 +5,7 @@ import com.exia.nocvsystem.entity.NocvNews;
 import com.exia.nocvsystem.service.NocvNewsService;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ import java.util.List;
 public interface NocvNewsMapper extends BaseMapper<NocvNews> {
     @Select("select * from nocv_news order by create_time desc limit 5")
     List<NocvNews> listNewsLimit5();
+    @Update("ALTER TABLE nocv_news AUTO_INCREMENT = 0;")
+    void autoIncrement();
 }

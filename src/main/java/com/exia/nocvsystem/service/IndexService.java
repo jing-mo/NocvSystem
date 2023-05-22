@@ -10,4 +10,5 @@ public interface IndexService extends IService<NocvData> {
     List<LineTrend> findSevenData();
 
     List<NocvData> listOrOrderByLimit34();
+    public void autoIncrement();
 }

@@ -78,6 +78,7 @@ public class MenuController {
     @RequestMapping("/addMenu")
     @ResponseBody
     public DataView addMenu(Menu menu) {
+        menuService.autoIncrement();
         DataView dataView = new DataView();
         boolean save = menuService.save(menu);
         if (!save) {
@@ -92,6 +93,7 @@ public class MenuController {
     @RequestMapping("/updateMenu")
     //更新菜单
     public DataView uppdateMenu(Menu menu) {
+        menuService.autoIncrement();
         menuService.updateById(menu);
         DataView dataView = new DataView();
         dataView.setCode(200);

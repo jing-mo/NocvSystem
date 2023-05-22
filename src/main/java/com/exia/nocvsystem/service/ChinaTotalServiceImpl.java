@@ -15,4 +15,9 @@ public class ChinaTotalServiceImpl extends ServiceImpl<ChinaTotalMapper, ChinaTo
         return chinaTotalMapper.maxID();
     }
 
+    @Override
+    public void autoIncrement() {
+        chinaTotalMapper.autoIncrement();
+    }
+
 }

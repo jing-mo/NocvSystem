@@ -23,4 +23,9 @@ public class NocvNewsServiceImpl extends ServiceImpl<NocvNewsMapper, NocvNews> i
     public List<NocvNews> listNewsLimit5() {
         return nocvNewsMapper.listNewsLimit5();
     }
+
+    @Override
+    public void autoIncrement() {
+        nocvNewsMapper.autoIncrement();
+    }
 }

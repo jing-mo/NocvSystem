@@ -8,7 +8,7 @@ public interface UserService extends IService<User> {
     String findTeacher(String teacherId);
 
     boolean isTrueInstitude(Integer classId, Integer institudeId);
-
+    public void autoIncrement();
     boolean isExistsCardId(String cardId);
     boolean isExistsUser(String cardId);
     boolean isExistsDean(Integer uid);

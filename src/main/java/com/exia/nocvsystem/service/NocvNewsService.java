@@ -13,4 +13,5 @@ import java.util.List;
 
 public interface NocvNewsService extends IService<NocvNews> {
     List<NocvNews> listNewsLimit5();
+    public void autoIncrement();
 }

@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 
 public class HealthClockVo extends HealthClock {
-    private Integer page;
-    private Integer limit;
+    private Integer page=1;
+    private Integer limit=10;
 
     //分页
 

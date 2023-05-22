@@ -5,6 +5,7 @@ import com.exia.nocvsystem.entity.User;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.MutablePropertyValues;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select username from user where card_id = #{teacherId}")
     List<String> queryUidByTeacherId(String teacherId);
     @Select("select card_id from user where card_id = #{cardId}")
-    List<User> FineCardId(String cardId);
+    List<String> FineCardId(String cardId);
     @Select("select * from user where card_id = #{cardId}")
     List<User> FindUser(String cardId);
     @Select("select institude_id from class where id = #{classId}")
@@ -44,4 +45,6 @@ public interface UserMapper extends BaseMapper<User> {
     Integer countOfDean(Integer institudeId);
     @Select("select user.id from user,user_role,institude where institude.id=#{institudeId} and user_role.rid=4 and user_role.uid =user.id and institude.id=user.institude_id")
     List<Integer> idOfDean(Integer institudeId);
+    @Update("ALTER TABLE user AUTO_INCREMENT = 0;")
+    void autoIncrement();
 }

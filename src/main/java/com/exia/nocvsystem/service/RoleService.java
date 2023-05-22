@@ -18,4 +18,5 @@ public interface RoleService extends IService<Role> {
 
 
     List<Integer> queryAllPermissionByRid(Integer userId);
+    public void autoIncrement();
 }

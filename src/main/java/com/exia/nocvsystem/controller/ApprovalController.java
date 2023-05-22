@@ -49,6 +49,7 @@ public class ApprovalController extends BaseController {
     @RequestMapping("/loadAllApproval")
     @ResponseBody
     public DataView loadAllApproval(ApprovalVo approvalVo, HttpSession httpSession){
+
         User user=(User) httpSession.getAttribute("user");
         if(StringUtils.isNotEmpty(user.getUsername())) {
             Integer uid=user.getId();
@@ -70,9 +71,8 @@ public class ApprovalController extends BaseController {
     @RequestMapping("/addApproval")
     @ResponseBody
     public DataView addApproval(ApprovalProcess approvalProcess,HttpSession httpSession){
-        DataView dataView=new DataView();
-        try{
-            if((userService.getById(approvalProcess.getUid()).equals(null))){
+                DataView dataView=new DataView();
+                approvalService.autoIncrement();
                 approvalProcess.setCreateTime(new Date());
                 User user = (User) httpSession.getAttribute("user");
                 Integer id = user.getId();
@@ -96,18 +96,10 @@ public class ApprovalController extends BaseController {
                 dataView.setCode(200);
                 dataView.setMsg("申请请假成功");
                 return dataView;
-            }else{
-                dataView.setCode(100);
-                dataView.setMsg("申请请假失败");
-                return dataView;
-            }
+            
         }
-        catch (Exception e){
-                dataView.setCode(100);
-                dataView.setMsg("申请请假失败");
-                return dataView;
-        }
-    }
+
+
     @RequestMapping("/rejectApproval")
     @ResponseBody
     public DataView rejectApproval(ApprovalProcess approvalProcess,HttpSession session ){

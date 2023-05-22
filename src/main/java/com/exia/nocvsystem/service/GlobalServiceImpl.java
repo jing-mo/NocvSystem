@@ -17,4 +17,9 @@ public class GlobalServiceImpl extends ServiceImpl<GlobalDataMapper,NocvGlobalDa
     public List<NocvGlobalData> listOrOrderByLimit198() {
         return globalDataMapper.listOrOrderByLimit198();
     }
+
+    @Override
+    public void autoIncrement() {
+        globalDataMapper.autoIncrement();
+    }
 }

@@ -42,6 +42,7 @@ public class ClassController {
     @ResponseBody
     @RequestMapping("/deleteById")
     public DataView deleteById(Integer id){
+        classService.autoIncrement();
         classService.removeById(id);
         DataView dataView=new DataView();
         dataView.setMsg("删除班级信息成功！");
@@ -51,6 +52,7 @@ public class ClassController {
     @ResponseBody
     @RequestMapping("/addOrUpdateClass")
     public DataView addOrUpdateNews(Class c){
+        classService.autoIncrement();
         classService.saveOrUpdate(c);
         DataView dataView=new DataView();
         dataView.setMsg("添加院系信息成功！");

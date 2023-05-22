@@ -8,6 +8,7 @@ import com.exia.nocvsystem.entity.NocvData;
 import com.exia.nocvsystem.service.IndexService;
 import com.exia.nocvsystem.vo.DataView;
 import com.exia.nocvsystem.vo.NocvDataView;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Update;
 
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -22,7 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -36,7 +40,7 @@ public class ChinaDataAdminController {
         IPage<NocvData> page=new Page<>(nocvDataView.getPage(), nocvDataView.getLimit());
         //2.模糊查询条件
         QueryWrapper<NocvData> queryWrapper=new QueryWrapper<>();
-        queryWrapper.like(!(nocvDataView.getName()==null),"name",nocvDataView.getName());
+        queryWrapper.like(StringUtils.isNotBlank(nocvDataView.getName()),"name",nocvDataView.getName()).orderByDesc("id");
         //3.疫情数据确诊最多的排在上面
         queryWrapper.orderByDesc("value");
         //4.查询数据库
@@ -47,6 +51,7 @@ public class ChinaDataAdminController {
     }
     @RequestMapping("/china/deleteById")
     public DataView deleteById(Integer id){
+        indexService.autoIncrement();
         indexService.removeById(id);
         DataView dataView=new DataView();
         dataView.setCode(200);
@@ -56,6 +61,7 @@ public class ChinaDataAdminController {
     //新增或修改,有值就是修改，没有值就是新增
     @PostMapping("/china/AddOrUpdateChina")
     public DataView addChina(NocvData nocvData){
+        indexService.autoIncrement();
         boolean save=indexService.saveOrUpdate(nocvData);
         DataView dataView=new DataView();
         if(save){
@@ -76,8 +82,9 @@ public class ChinaDataAdminController {
      */
 
     @RequestMapping(value = "/excelImportChina",method = RequestMethod.POST)
-    public DataView excelImportChina(@RequestParam("file")MultipartFile file) throws IOException {
+    public DataView excelImportChina(@RequestParam("file")MultipartFile file) throws IOException, ParseException {
         DataView dataView=new DataView();
+        indexService.autoIncrement();
         //1.文件不能为空
         if(file.isEmpty()) {
             dataView.setMsg("数据不能为空！");
@@ -89,14 +96,17 @@ public class ChinaDataAdminController {
         List<NocvData> list=new ArrayList<>();
         XSSFRow row=null;
         //4.解析数据，装到集合里面
+        if(sheet.getPhysicalNumberOfRows()==34){
         for(int i=0;i<sheet.getPhysicalNumberOfRows();i++){
             //定义实体
             NocvData nocvData=new NocvData();
             //每一行的数据,放到实体类中
-            row=sheet.getRow(1);
+            row=sheet.getRow(i);
+
             //解析数据
             nocvData.setName(row.getCell(0).getStringCellValue());
             nocvData.setValue((int)row.getCell(1).getNumericCellValue());
+            nocvData.setUpdateTime(new Date());
             //添加list集合
             list.add(nocvData);
         }
@@ -104,6 +114,11 @@ public class ChinaDataAdminController {
         dataView.setCode(200);
         dataView.setMsg("Excel插入成功");
         return dataView;
+        }else{
+            dataView.setCode(100);
+            dataView.setMsg("Excel插入失败");
+            return dataView;
+        }
     }
         /*
         导出Excel疫情数据文件

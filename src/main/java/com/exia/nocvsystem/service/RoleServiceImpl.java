@@ -42,5 +42,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return roleMapper.queryAllPermissionByRid(userId);
     }
 
+    @Override
+    public void autoIncrement() {
+        roleMapper.autoIncrement();
+    }
+
 
 }

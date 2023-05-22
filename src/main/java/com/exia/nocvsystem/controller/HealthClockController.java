@@ -45,6 +45,7 @@ public class HealthClockController extends BaseController{
     @RequestMapping("/addHealthClock")
     @ResponseBody
     public DataView addHealthClock(HealthClock healthClock){
+        healthClockService.autoIncrement();
         DataView dataView = new DataView();
         try {
             if(userService.isExistsUser(healthClock.getCard())){
@@ -71,6 +72,7 @@ public class HealthClockController extends BaseController{
     @RequestMapping("/deleteHealthClockById")
     @ResponseBody
     public DataView deleteHealthClockById(Integer id){
+        healthClockService.autoIncrement();
         DataView dataView=new DataView();
         try{
             healthClockService.removeById(id);

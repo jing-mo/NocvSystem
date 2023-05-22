@@ -13,6 +13,9 @@ spring:
     suffix: .html
     encoding: UTF-8
     content-type: text/html
+    main:
+       allow-circular-references: true
+
 #shiro的配置
 shiro:
   anon-urls:

@@ -23,4 +23,9 @@ public class IndexServiceImpl extends ServiceImpl<IndexMapper, NocvData> impleme
     public List<NocvData> listOrOrderByLimit34() {
         return indexMapper.listOrOrderByLimit34();
     }
+
+    @Override
+    public void autoIncrement() {
+        indexMapper.autoIncrement();
+    }
 }

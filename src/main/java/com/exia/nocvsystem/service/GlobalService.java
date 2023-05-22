@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface GlobalService extends IService<NocvGlobalData> {
     List<NocvGlobalData> listOrOrderByLimit198();
+    public void autoIncrement();
 }

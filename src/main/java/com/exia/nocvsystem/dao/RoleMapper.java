@@ -3,10 +3,7 @@ package com.exia.nocvsystem.dao;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.exia.nocvsystem.entity.Role;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.ognl.DynamicSubscript;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +38,7 @@ public interface RoleMapper extends BaseMapper<Role> {
 
     @Select("select a.data_authority from role a,user_role b where a.id = b.rid and b.uid=#{uid}")
     Integer queryDataAuthority(Integer uid);
-
+    @Update("ALTER TABLE role AUTO_INCREMENT = 0;")
+    void autoIncrement();
 
 }

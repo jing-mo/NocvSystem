@@ -44,6 +44,7 @@ public class HeSuanController extends BaseController{
     @RequestMapping("/addHeSuan")
     @ResponseBody
     public DataView addHeSuan(HeSuan heSuan){
+        heSuanService.autoIncrement();
         DataView dataView=new DataView();
         try{
             if(userService.isExistsUser(heSuan.getCard())){
@@ -69,6 +70,7 @@ public class HeSuanController extends BaseController{
     @RequestMapping("/deleteHeSuan")
     @ResponseBody
     public DataView deleteHeSuan(HeSuan heSuan){
+        heSuanService.autoIncrement();
         heSuanService.removeById(heSuan.getId());
         DataView dataView=new DataView();
         dataView.setCode(200);
@@ -79,8 +81,8 @@ public class HeSuanController extends BaseController{
     @RequestMapping("/updateHeSuan")
     @ResponseBody
     public DataView updateHeSuan(HeSuan heSuan){
-        DataView dataView=new DataView();
-        try{
+        DataView dataView = new DataView();
+        try {
             heSuanService.updateById(heSuan);
             dataView.setCode(200);
             dataView.setMsg("核酸信息修改成功");

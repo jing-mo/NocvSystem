@@ -42,6 +42,7 @@ public class NocvNewsController {
     @ResponseBody
     @RequestMapping("/deleteById")
     public DataView deleteById(Integer id){
+        nocvNewsService.autoIncrement();
         nocvNewsService.removeById(id);
         DataView dataView=new DataView();
         dataView.setMsg("删除新闻成功！");
@@ -51,6 +52,7 @@ public class NocvNewsController {
     @ResponseBody
     @RequestMapping("/addOrUpdateNews")
     public DataView addOrUpdateNews(NocvNews nocvNews){
+        nocvNewsService.autoIncrement();
         nocvNews.setCreateTime(new Date());
         nocvNewsService.saveOrUpdate(nocvNews);
         DataView dataView=new DataView();

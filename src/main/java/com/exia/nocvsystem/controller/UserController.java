@@ -117,8 +117,8 @@ public class UserController extends BaseController{
     @RequestMapping("/addUser")
     @ResponseBody
     public DataView addUser(User user) {
+        userService.autoIncrement();
         DataView dataView = new DataView();
-
             if(!userService.isExistsUser(user.getCardId())){
                 String password=user.getPassword();
                 String salt= PasswordHelper.createSalt();
@@ -132,7 +132,7 @@ public class UserController extends BaseController{
                     dataView.setCode(100);
                     return dataView;
                 }
-                if(userService.isExistsCardId(user.getCardId())&&!userService.isExistsCardId(user.getTeacherId())){
+                if(!userService.isExistsCardId(user.getTeacherId())){
                     dataView.setMsg("用户添加失败");
                     dataView.setCode(100);
                     return dataView;
@@ -195,11 +195,16 @@ public class UserController extends BaseController{
                 dataView.setCode(100);
                 return dataView;
             }
+            if(!userService.isExistsCardId(user.getTeacherId())){
+                dataView.setMsg("该上级不存在！");
+                dataView.setCode(100);
+                return dataView;
+            }
             userService.updateById(user);
             dataView.setMsg("用户修改成功");
             dataView.setCode(200);
             return dataView;
-        }catch (IndexOutOfBoundsException e){
+        }catch (Exception e){
             dataView.setMsg("用户修改失败");
             dataView.setCode(200);
             return dataView;
@@ -209,6 +214,7 @@ public class UserController extends BaseController{
     @RequestMapping("/deleteUser/{id}")
     @ResponseBody
     public DataView deleteUser(@PathVariable("id") Integer id) {
+        userService.autoIncrement();
         userService.removeById(id);
         DataView dataView = new DataView();
         dataView.setMsg("用户删除成功");
@@ -274,7 +280,13 @@ public class UserController extends BaseController{
     public DataView saveUserRole(Integer uid, Integer[] ids) {
         DataView dataView = new DataView();
         try {
-            if(userService.isExistsDean(uid)) {
+            boolean hasDean=false;
+            for(int i=0;i<ids.length;i++)
+                if(ids[i]==4){
+                    hasDean=true;
+                    break;
+                }
+            if(userService.isExistsDean(uid)&&hasDean==true) {
                 dataView.setMsg("该院系已经有一名院长！");
                 dataView.setCode(100);
                 return dataView;
@@ -284,7 +296,7 @@ public class UserController extends BaseController{
             dataView.setCode(200);
             return dataView;
         }catch (Exception e){
-            dataView.setMsg("用户分配角色失败，请重新检查相关信息");
+            dataView.setMsg("用户分配角色失败！");
             dataView.setCode(100);
             return dataView;
         }

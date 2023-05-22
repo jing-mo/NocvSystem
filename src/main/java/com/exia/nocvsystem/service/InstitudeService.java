@@ -6,4 +6,5 @@ import org.springframework.stereotype.Service;
 
 
 public interface InstitudeService extends IService<Institude> {
+    public void autoIncrement();
 }

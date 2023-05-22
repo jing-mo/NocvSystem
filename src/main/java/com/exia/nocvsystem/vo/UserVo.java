@@ -15,6 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserVo extends User {
-    private Integer page;
-    private Integer limit;
+    private Integer page=1;
+    private Integer limit=10;
 }

@@ -47,6 +47,7 @@ public class VaccineController extends BaseController{
     @RequestMapping("/addVaccine")
     @ResponseBody
     public DataView addVaccine(Vaccine vaccine){
+        vaccineService.autoIncrement();
         DataView dataView = new DataView();
         try {
             if (userService.isExistsUser(vaccine.getCard())) {
@@ -68,6 +69,7 @@ public class VaccineController extends BaseController{
     @RequestMapping("/deleteVaccine")
     @ResponseBody
     public DataView deleteVaccine(Vaccine vaccine){
+        vaccineService.autoIncrement();
         vaccineService.removeById(vaccine.getId());
         DataView dataView=new DataView();
         dataView.setCode(200);

@@ -10,4 +10,5 @@ import org.springframework.stereotype.Service;
  * Create by 2023/4/23 9:47
  */
 public interface VaccineService extends IService<Vaccine> {
+    public void autoIncrement();
 }

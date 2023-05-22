@@ -16,6 +16,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class HeSuanVo extends HeSuan {
-    private Integer page;
-    private Integer limit;
+    private Integer page=1;
+    private Integer limit=10;
 }

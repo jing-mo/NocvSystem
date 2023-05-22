@@ -3,6 +3,7 @@ package com.exia.nocvsystem.service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.exia.nocvsystem.dao.InstitudeMapper;
 import com.exia.nocvsystem.entity.Institude;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,4 +13,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class InstitudeServiceImpl extends ServiceImpl<InstitudeMapper, Institude> implements InstitudeService{
+    @Autowired
+    InstitudeMapper institudeMapper;
+
+    @Override
+    public void autoIncrement() {
+        institudeMapper.autoIncrement();
+    }
 }

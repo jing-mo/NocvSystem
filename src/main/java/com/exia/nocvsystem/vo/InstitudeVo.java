@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InstitudeVo extends Institude {
-    private Integer page;
-    private Integer limit;
+    private Integer page=1;
+    private Integer limit=10;
 }
