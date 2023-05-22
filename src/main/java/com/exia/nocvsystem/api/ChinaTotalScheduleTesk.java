@@ -65,6 +65,7 @@ public class ChinaTotalScheduleTesk {
         SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
         Date update_time = format.parse(updateTime.toString());
         dataEntity.setUpdateTime(update_time);
+        indexService.autoIncrement();
         //6.插入数据库(更新)
         chinaTotalService.save(dataEntity);
         //7.删除缓存
@@ -72,7 +73,7 @@ public class ChinaTotalScheduleTesk {
         if(jedis!=null){
             jedis.flushDB();
         }
-        //拿到areaTree
+        //拿到世界疫情数据
         JSONArray areaTree=jsonData.getJSONArray("worldlist");
         Object[] objects=areaTree.toArray();
         List<NocvGlobalData> nocvGlobalDataList=new ArrayList<>();

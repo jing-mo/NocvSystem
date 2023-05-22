@@ -11,7 +11,7 @@
   <div class="layui-col-md3 layui-col-xs12 user_right" style="position: center">
     <div class="layui-upload-list userFace" style="margin: 40px; position: center">
       <input type="hidden" name="imgpath" th:name="id" id="imgpath">
-      <img class="layui-upload-img layui-circle userFaceBtn userAvatar" style="width: 200px;height: 200px" th:src="${user.img}" id="userFace">
+      <img class="layui-upload-img layui-circle userFaceBtn userAvatar" style="width: 150px;height: 150px" th:src="${user.img}" id="userFace">
     </div>
     <button type="button" style="margin: 30px" class="layui-btn layui-btn-primary userFaceBtn"><i class="layui-icon">&#xe67c;</i> 点击此处更换头像</button>
   </div>
@@ -20,6 +20,9 @@
       <label class="layui-form-label">用户名</label>
       <div class="layui-input-block">
         <input type="hidden" class="id" name="id" th:value="${user.id}">
+        <input type="hidden" class="classId" name="classId" th:value="${user.classId}">
+        <input type="hidden" class="teacherId" name="teacherId" th:value="${user.teacherId}">
+        <input type="hidden" class="institudeId" name="institudeId" th:value="${user.institudeId}">
         <input type="text" value="" id="name" th:value="${user.username}" class="layui-input">
       </div>
     </div>
@@ -108,7 +111,6 @@
       });
       setTimeout(function(){
         layer.close(index);
-        layer.msg("提交成功！");
       },2000);
       return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
     })

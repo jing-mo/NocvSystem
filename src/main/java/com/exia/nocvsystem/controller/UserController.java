@@ -205,7 +205,7 @@ public class UserController extends BaseController{
             dataView.setCode(200);
             return dataView;
         }catch (Exception e){
-            dataView.setMsg("用户修改失败");
+            dataView.setMsg("用户修改失败1");
             dataView.setCode(200);
             return dataView;
         }
@@ -331,7 +331,7 @@ public class UserController extends BaseController{
 
         String date = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
         // 图片存放位置
-        String imagePath = "E:/java/NocvSystem/src/main/resources/static/images/UserFaces/"+"time"+date+"name";
+        String imagePath = "E:/java/NocvSystem/src/main/resources/static/images/userfaces/"+"time"+date+"name";
         DataView dataView = new DataView();
         System.out.println(photo.getSize());
         if (photo.getSize() > 1048576) {
@@ -340,7 +340,7 @@ public class UserController extends BaseController{
             return dataView;
         } else {
             try (InputStream input = photo.getInputStream()) {
-                File path = new File("E:/java/NocvSystem/src/main/resources/static/images/UserFaces/");
+                File path = new File("E:/java/NocvSystem/src/main/resources/static/images/userfaces/");
                 if (!path.exists()) {
                     path.mkdir();
                 }
@@ -351,10 +351,10 @@ public class UserController extends BaseController{
                 //使用UUID
                 String fileName = UUID.randomUUID().toString() + suffixName;
                 //保存照片到磁盘
-                photo.transferTo(new File("E:/java/NocvSystem/src/main/resources/static/images/UserFaces/" + fileName));
+                photo.transferTo(new File("E:/java/NocvSystem/src/main/resources/static/images/userfaces/" + fileName));
 
                 // 数据库存放图片信息 path
-                String url = "images/UserFaces/"+fileName;
+                String url = "/images/userfaces/"+fileName;
                 User user = (User) session.getAttribute("user");
                 user.setImg(url);
                 userService.updateById(user);

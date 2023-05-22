@@ -15,6 +15,6 @@ public class UploadConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/images/UserFaces/**").addResourceLocations("file:" + "E:/java/NocvSystem/src/main/resources/static/images/UserFaces/");
+        registry.addResourceHandler("/images/userfaces/**").addResourceLocations("file:" + "E:/java/NocvSystem/src/main/resources/static/images/userfaces/");
     }
 }

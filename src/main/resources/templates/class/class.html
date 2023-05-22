@@ -27,6 +27,13 @@
                     <input type="text" name="name" lay-verify="required" class="layui-input input-radius" placeholder="请输入班级名称">
                     <input type="hidden" name="id">
                 </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">院校编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="institudeId" lay-verify="required" class="layui-input input-radius" placeholder="请输入院校名称">
+                        <input type="hidden" name="id">
+                    </div>
+                </div>
             </div>
 
             <div class="layui-inline" style="padding-left: 10%">
@@ -123,6 +130,7 @@
                 {type: 'checkbox', fixed: 'left'}
                 ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
                 ,{field: 'name', title: '班级名称', width:150}
+                ,{field: 'institudeId', title: '院校编号', width:150}
                 ,{fixed: 'right', width: 200, align:'center', toolbar: '#barDemo'}
             ]]
         });
