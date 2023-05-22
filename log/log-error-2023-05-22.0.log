@@ -1,0 +1,112 @@
+===2023-05-22 19:59:19.098 ERROR org.apache.coyote.http11.Http11Processor Line:175 - Error processing request
+java.io.UncheckedIOException: Cannot delete C:\Users\exia\AppData\Local\Temp\tomcat.8080.1626489969989764720\work\Tomcat\localhost\ROOT\upload_02b1eafc_6eca_48f3_8eaa_368575c3e6ea_00000000.tmp
+	at org.apache.tomcat.util.http.fileupload.disk.DiskFileItem.delete(DiskFileItem.java:431)
+	at org.apache.catalina.core.ApplicationPart.delete(ApplicationPart.java:54)
+	at org.apache.catalina.connector.Request.recycle(Request.java:483)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:441)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:891)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1784)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.io.IOException: Cannot delete C:\Users\exia\AppData\Local\Temp\tomcat.8080.1626489969989764720\work\Tomcat\localhost\ROOT\upload_02b1eafc_6eca_48f3_8eaa_368575c3e6ea_00000000.tmp
+	... 13 common frames omitted
+===2023-05-22 19:59:19.103 ERROR org.apache.coyote.http11.Http11NioProtocol Line:175 - Error reading request, ignored
+java.io.UncheckedIOException: Cannot delete C:\Users\exia\AppData\Local\Temp\tomcat.8080.1626489969989764720\work\Tomcat\localhost\ROOT\upload_02b1eafc_6eca_48f3_8eaa_368575c3e6ea_00000000.tmp
+	at org.apache.tomcat.util.http.fileupload.disk.DiskFileItem.delete(DiskFileItem.java:431)
+	at org.apache.catalina.core.ApplicationPart.delete(ApplicationPart.java:54)
+	at org.apache.catalina.connector.Request.recycle(Request.java:483)
+	at org.apache.catalina.connector.CoyoteAdapter.log(CoyoteAdapter.java:515)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:429)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:891)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1784)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.io.IOException: Cannot delete C:\Users\exia\AppData\Local\Temp\tomcat.8080.1626489969989764720\work\Tomcat\localhost\ROOT\upload_02b1eafc_6eca_48f3_8eaa_368575c3e6ea_00000000.tmp
+	... 13 common frames omitted
+===2023-05-22 19:59:19.104 ERROR org.apache.tomcat.util.net.NioEndpoint Line:175 - Error running socket processor
+java.io.UncheckedIOException: Cannot delete C:\Users\exia\AppData\Local\Temp\tomcat.8080.1626489969989764720\work\Tomcat\localhost\ROOT\upload_02b1eafc_6eca_48f3_8eaa_368575c3e6ea_00000000.tmp
+	at org.apache.tomcat.util.http.fileupload.disk.DiskFileItem.delete(DiskFileItem.java:431)
+	at org.apache.catalina.core.ApplicationPart.delete(ApplicationPart.java:54)
+	at org.apache.catalina.connector.Request.recycle(Request.java:483)
+	at org.apache.catalina.connector.CoyoteAdapter.log(CoyoteAdapter.java:515)
+	at org.apache.catalina.connector.CoyoteAdapter.checkRecycled(CoyoteAdapter.java:539)
+	at org.apache.coyote.http11.Http11Processor.recycle(Http11Processor.java:1426)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.release(AbstractProtocol.java:1098)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1056)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1784)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.io.IOException: Cannot delete C:\Users\exia\AppData\Local\Temp\tomcat.8080.1626489969989764720\work\Tomcat\localhost\ROOT\upload_02b1eafc_6eca_48f3_8eaa_368575c3e6ea_00000000.tmp
+	... 14 common frames omitted
+===2023-05-22 21:46:46.686 ERROR org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter Line:40  - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+The dependencies of some of the beans in the application context form a cycle:
+
+   vaccineController (field com.exia.nocvsystem.service.VaccineService com.exia.nocvsystem.controller.VaccineController.vaccineService)
+┌─────┐
+|  vaccineServiceImpl (field com.exia.nocvsystem.service.VaccineService com.exia.nocvsystem.service.VaccineServiceImpl.vaccineService)
+└─────┘
+
+
+Action:
+
+Relying upon circular references is discouraged and they are prohibited by default. Update your application to remove the dependency cycle between beans. As a last resort, it may be possible to break the cycle automatically by setting spring.main.allow-circular-references to true.
+
+===2023-05-22 21:47:14.274 ERROR org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter Line:40  - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+The dependencies of some of the beans in the application context form a cycle:
+
+   vaccineController (field com.exia.nocvsystem.service.VaccineService com.exia.nocvsystem.controller.VaccineController.vaccineService)
+┌─────┐
+|  vaccineServiceImpl (field com.exia.nocvsystem.service.VaccineService com.exia.nocvsystem.service.VaccineServiceImpl.vaccineService)
+└─────┘
+
+
+Action:
+
+Relying upon circular references is discouraged and they are prohibited by default. Update your application to remove the dependency cycle between beans. As a last resort, it may be possible to break the cycle automatically by setting spring.main.allow-circular-references to true.
+
+===2023-05-22 21:48:37.796 ERROR org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter Line:40  - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+The dependencies of some of the beans in the application context form a cycle:
+
+   vaccineController (field com.exia.nocvsystem.service.VaccineService com.exia.nocvsystem.controller.VaccineController.vaccineService)
+┌─────┐
+|  vaccineServiceImpl (field com.exia.nocvsystem.service.VaccineService com.exia.nocvsystem.service.VaccineServiceImpl.vaccineService)
+└─────┘
+
+
+Action:
+
+Relying upon circular references is discouraged and they are prohibited by default. Update your application to remove the dependency cycle between beans. As a last resort, it may be possible to break the cycle automatically by setting spring.main.allow-circular-references to true.
+

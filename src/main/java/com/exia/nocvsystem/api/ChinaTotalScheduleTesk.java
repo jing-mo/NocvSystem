@@ -62,7 +62,6 @@ public class ChinaTotalScheduleTesk {
         dataEntity.setHeal(Integer.valueOf(heal.toString()));
         dataEntity.setSuspect(0);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
         Date update_time = format.parse(updateTime.toString());
         dataEntity.setUpdateTime(update_time);
         indexService.autoIncrement();
